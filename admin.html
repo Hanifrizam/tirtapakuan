@@ -4,255 +4,1735 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin Operasional — Perumda Tirta Pakuan</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230f3b77'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff'>✦</text></svg>'>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230f3b77'/><text x='50' y='70' font-size='56' text-anchor='middle' fill='%23fff'>✦</text></svg>">
 <link rel="stylesheet" href="css/style.css">
 <style>
-  .admin-shell { min-height:100vh; background-color:#edf3f7; background-image:linear-gradient(rgba(15,59,119,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(15,59,119,.035) 1px,transparent 1px); background-size:28px 28px; }
-  .admin-top { background:linear-gradient(110deg,#071f43 0%,var(--blue-900) 52%,#147b7b 100%); color:#fff; box-shadow:0 8px 26px rgba(4,25,55,.22); border-bottom:3px solid var(--teal-500); }
-  .admin-top-inner { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:15px 0; flex-wrap:wrap; }
-  .admin-top .brand-logo { width:38px; height:38px; background:var(--teal-500); border-color:rgba(255,255,255,.4); box-shadow:0 0 0 5px rgba(10,168,160,.15); }
-  .admin-top .brand small { color:#9fe7e1; }
-  .admin-top .btn.white { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.24); }
-  .admin-top .btn.white:hover { background:rgba(255,255,255,.2); }
-  .admin-top-meta { display:flex; align-items:center; gap:12px; margin-left:auto; }
-  .admin-live { display:flex; align-items:center; gap:7px; color:#c9f9ec; font-size:.75rem; font-weight:700; letter-spacing:.35px; white-space:nowrap; }
-  .admin-live::before { content:""; width:8px; height:8px; border-radius:50%; background:#55e0a5; box-shadow:0 0 0 4px rgba(85,224,165,.16); }
-  .admin-layout { display:grid; grid-template-columns:238px 1fr; gap:30px; padding:34px 0 58px; align-items:start; }
-  .admin-side { position:sticky; top:78px; }
-  .admin-nav { background:#09264d; border:1px solid rgba(255,255,255,.08); border-radius:16px; overflow:hidden; box-shadow:0 14px 28px rgba(11,45,92,.16); padding:8px; }
-  .admin-nav button { width:100%; display:flex; gap:11px; align-items:center; border:0; border-radius:10px; background:transparent; color:#b9cde3; padding:13px 13px; font:600 .9rem inherit; text-align:left; cursor:pointer; transition:.18s; }
-  .admin-nav button:last-child { border-bottom:0; }
-  .admin-nav button:hover { background:rgba(255,255,255,.08); color:#fff; transform:translateX(2px); }
-  .admin-nav button.active { background:linear-gradient(100deg,var(--teal-500),#1a8f9a); color:#fff; box-shadow:0 7px 15px rgba(10,168,160,.24); }
-  .admin-nav .ico { width:25px; height:25px; display:grid; place-items:center; border-radius:7px; background:rgba(255,255,255,.08); text-align:center; }
-  .admin-nav button.active .ico { background:rgba(255,255,255,.18); }
-  .admin-side > .card { border:0; box-shadow:0 12px 24px rgba(11,45,92,.1); }
-  .admin-side > .card::before { content:""; display:block; width:34px; height:3px; margin-bottom:13px; border-radius:99px; background:var(--teal-500); }
-  .admin-section { display:none; animation:fadeUp .25s; }
-  .admin-section.active { display:block; }
-  .admin-section-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:22px; flex-wrap:wrap; }
-  .admin-section-head > div:first-child { position:relative; padding-left:17px; }
-  .admin-section-head > div:first-child::before { content:""; position:absolute; left:0; top:3px; bottom:5px; width:4px; border-radius:99px; background:linear-gradient(var(--teal-500),var(--blue-500)); }
-  .admin-section-head h1 { color:var(--blue-900); font-size:clamp(1.65rem,3vw,2rem); letter-spacing:-.3px; margin-bottom:4px; }
-  .admin-toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding:12px; background:var(--blue-50); border:1px solid #d5e7f4; border-radius:12px; }
-  .admin-toolbar .input, .admin-toolbar .select { width:auto; min-width:170px; }
-  .admin-kpi { gap:14px; }
-  .admin-kpi .stat-card { position:relative; overflow:hidden; padding:21px 20px; background:rgba(255,255,255,.95); border-radius:16px; box-shadow:0 9px 20px rgba(11,45,92,.07); transition:transform .2s,box-shadow .2s; }
-  .admin-kpi .stat-card:hover { transform:translateY(-3px); box-shadow:0 14px 25px rgba(11,45,92,.12); }
-  .admin-kpi .stat-card::after { content:""; position:absolute; width:78px; height:78px; right:-26px; bottom:-30px; border-radius:50%; background:currentColor; opacity:.055; }
-  .admin-kpi .value { font-size:1.95rem; margin-top:5px; letter-spacing:-.5px; }
-  .admin-kpi .delta { color:var(--gray-500); font-weight:600; }
-  .admin-main .card, .admin-section > .card { box-shadow:0 10px 24px rgba(11,45,92,.07); }
-  .admin-section .card { border-color:#dce6ee; border-radius:16px; }
-  .admin-section .card-header { padding-bottom:3px; }
-  .admin-section .card-header h3 { letter-spacing:-.15px; }
-  .admin-ticket-table td { vertical-align:middle; }
-  .admin-ticket-table th { background:#e8f3f8; padding-top:13px; padding-bottom:13px; }
-  .admin-ticket-table tr:hover td { background:#f7fbfd; }
-  .admin-ticket-id { color:var(--blue-700); font-weight:800; white-space:nowrap; }
-  .admin-ticket-name { font-weight:700; color:var(--gray-900); }
-  .admin-ticket-name small { display:block; color:var(--gray-500); font-weight:400; }
-  .admin-actions { display:flex; gap:6px; flex-wrap:wrap; }
-  .admin-actions .btn { white-space:nowrap; }
-  .admin-empty { padding:34px 18px; text-align:center; color:var(--gray-500); }
-  .admin-alert { border:1px solid #f4d79a; border-left:5px solid var(--amber); background:linear-gradient(100deg,#fff8e9,#fffdf7); color:#735000; padding:13px 16px; border-radius:10px; margin-bottom:20px; box-shadow:0 5px 14px rgba(150,100,0,.05); }
-  .service-admin-row { display:grid; grid-template-columns:1fr 110px 110px; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid var(--gray-200); }
-  .service-admin-row:last-child { border-bottom:0; }
-  .service-admin-row strong { display:block; }
-  .service-admin-row small { color:var(--gray-500); }
-  .admin-log { list-style:none; padding:0; margin:0; }
-  .admin-log li { display:flex; gap:14px; padding:14px 4px; border-bottom:1px solid var(--gray-200); }
-  .admin-log li:last-child { border-bottom:0; }
-  .admin-log time { flex:0 0 88px; color:var(--teal-600); font-size:.78rem; font-weight:700; }
-  @media (max-width:920px) { .admin-layout { grid-template-columns:1fr; } .admin-side { position:static; } .admin-nav { display:flex; flex-wrap:wrap; } .admin-nav button { width:auto; flex:1; min-width:145px; } }
-  @media (max-width:640px) { .admin-toolbar .input, .admin-toolbar .select { width:100%; } .admin-ticket-table { min-width:760px; } .service-admin-row { grid-template-columns:1fr 80px 80px; } }
+/* ============================================================
+   ADMIN OPERASIONAL — UI SHELL (dummy / mode demo)
+   Data ditarik dari halaman lain lewat js/main.js (TP.*)
+   ============================================================ */
+body.adm {
+  --adm-bg:#f3f6fb;
+  --adm-panel:#ffffff;
+  --adm-soft:#f7f9fd;
+  --adm-border:#e5eaf3;
+  --adm-line:#eef2f8;
+  --adm-text:#12213b;
+  --adm-muted:#7b8ba4;
+  --adm-field:#ffffff;
+  --adm-shadow:0 8px 26px rgba(13,38,78,.06);
+  --adm-accent:#1666c4;
+  background:var(--adm-bg);
+  color:var(--adm-text);
+  -webkit-font-smoothing:antialiased;
+}
+body.adm.dark {
+  --adm-bg:#0b1220;
+  --adm-panel:#121b2e;
+  --adm-soft:#16213a;
+  --adm-border:#22304e;
+  --adm-line:#1d2a44;
+  --adm-text:#e7edfa;
+  --adm-muted:#8fa1bd;
+  --adm-field:#0e1729;
+  --adm-shadow:0 10px 30px rgba(0,0,0,.35);
+  --adm-accent:#4d9bfb;
+  /* remap token global agar komponen ikut gelap */
+  --blue-900:#e7edfa; --blue-800:#dce7fb; --blue-700:#8fbcff; --blue-600:#4d9bfb; --blue-500:#4d9bfb;
+  --blue-100:#16274a; --blue-50:#131f3a;
+  --gray-900:#e7edfa; --gray-700:#c9d6ee; --gray-600:#a9b8d0; --gray-500:#8fa1bd; --gray-400:#7286a6;
+  --gray-300:#2b3b5c; --gray-200:#22304e; --gray-100:#16213a;
+  --green:#57c98a; --green-bg:#0f2c22; --amber-bg:#33260f; --danger-bg:#331514;
+}
+body.adm.dark .card,
+body.adm.dark .stat-card,
+body.adm.dark .modal,
+body.adm.dark .wa-menu { background:var(--adm-panel); border-color:var(--adm-border); color:var(--adm-text); }
+body.adm.dark .chip.blue { background:#16274a; color:#8fbcff; }
+body.adm.dark .chip.teal { background:#0f2f2c; color:#5fd8c9; }
+body.adm.dark .chip.amber { background:#33260f; color:#f5c46a; }
+body.adm.dark .chip.danger { background:#331514; color:#ff8f8a; }
+body.adm.dark .chip.gray { background:#1e2a44; color:#9fb0cb; }
+body.adm.dark .seg { background:#16213a; }
+body.adm.dark .seg button { color:#8fa1bd; }
+body.adm.dark .seg button.active { background:#22304e; color:#cfe1ff; }
+body.adm.dark .toast { background:#1c2b4a; color:#e7edfa; }
+body.adm.dark .toast.success { background:#1c6b45; }
+body.adm.dark .toast.error { background:#8f2f2b; }
+body.adm.dark .modal-close { background:#1e2a44; color:#a9b8d0; }
+body.adm.dark .admin-dark-safe { color:var(--adm-text); }
 
-  /* Admin workspace polish */
-  .admin-shell { background:#f5f7fb; background-image:none; }
-  .admin-top { background:#102a4d; border-bottom:1px solid rgba(255,255,255,.12); box-shadow:0 2px 12px rgba(12,32,58,.18); }
-  .admin-top-inner { min-height:70px; padding:12px 0; }
-  .admin-top .brand { letter-spacing:.1px; }
-  .admin-top .brand-logo { width:36px; height:36px; box-shadow:none; background:#1a8f9a; }
-  .admin-top-meta { gap:8px; }
-  .admin-live { padding-right:8px; border-right:1px solid rgba(255,255,255,.18); }
-  .admin-live::before { width:7px; height:7px; box-shadow:none; }
-  .admin-layout { grid-template-columns:220px minmax(0, 1fr); gap:28px; max-width:1240px; padding-top:28px; }
-  .admin-side { top:92px; }
-  .admin-nav { border-radius:12px; background:#102a4d; padding:6px; box-shadow:0 6px 18px rgba(16,42,77,.12); }
-  .admin-nav button { min-height:45px; padding:10px 12px; font-size:.86rem; }
-  .admin-nav button.active { background:#1a8f9a; box-shadow:none; }
-  .admin-nav button:hover { transform:none; background:#1a3a60; }
-  .admin-nav .ico { width:22px; height:22px; font-size:.85rem; }
-  .admin-side > .card { margin-top:12px !important; padding:16px !important; border:1px solid #e2e8f0; box-shadow:0 5px 16px rgba(16,42,77,.06); }
-  .admin-side > .card::before { width:28px; height:2px; margin-bottom:11px; }
-  .admin-main, .admin-section > .card { box-shadow:0 5px 16px rgba(16,42,77,.055); }
-  .admin-section-head { margin-bottom:20px; }
-  .admin-section-head > div:first-child { padding-left:14px; }
-  .admin-section-head > div:first-child::before { width:3px; background:#1a8f9a; }
-  .admin-section-head h1 { font-size:1.65rem; letter-spacing:-.45px; }
-  .admin-section-head .eyebrow { color:#1a8f9a; font-size:.68rem; letter-spacing:1.6px; }
-  .admin-kpi { gap:12px; }
-  .admin-kpi .stat-card { min-height:124px; padding:17px 18px; border:1px solid #e1e8f0; border-top-width:3px; border-radius:12px; box-shadow:0 4px 12px rgba(16,42,77,.045); }
-  .admin-kpi .stat-card:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(16,42,77,.09); }
-  .admin-kpi .stat-card::after { width:64px; height:64px; right:-18px; bottom:-25px; }
-  .admin-kpi .label { font-size:.7rem; letter-spacing:.75px; }
-  .admin-kpi .value { font-size:1.75rem; }
-  .admin-kpi .delta { font-size:.74rem; }
-  .admin-alert { margin-bottom:16px; padding:11px 14px; font-size:.83rem; }
-  .admin-section .card { border-radius:12px; box-shadow:0 5px 16px rgba(16,42,77,.055); }
-  .admin-section .card-header { margin-bottom:11px; }
-  .admin-section .card-header h3 { font-size:.98rem; }
-  .admin-section .card-header .sub { font-size:.76rem; }
-  .admin-toolbar { padding:9px; background:#f7fafc; border-color:#e3eaf1; border-radius:9px; }
-  .admin-toolbar .input, .admin-toolbar .select { min-height:38px; padding:8px 11px; font-size:.86rem; }
-  .admin-ticket-table { font-size:.84rem !important; }
-  .admin-ticket-table th { padding:10px 11px; font-size:.68rem; letter-spacing:.4px; }
-  .admin-ticket-table td { padding:11px; }
-  .admin-ticket-table .select { font-size:.78rem; background:#fff; border-color:#d7e0e9; }
-  .admin-ticket-id { font-size:.82rem; }
-  .admin-actions .btn { font-size:.76rem; padding:6px 10px; }
-  .service-admin-row { padding:12px 4px; }
-  .service-admin-row strong { font-size:.88rem; }
-  .service-admin-row small { font-size:.75rem; }
-  .admin-log li { padding:12px 3px; }
-  @media (max-width:920px) { .admin-layout { grid-template-columns:1fr; } .admin-side { top:auto; } }
-  @media (max-width:640px) { .admin-top-meta { width:100%; margin-left:0; } .admin-live { display:none; } .admin-top-meta .btn { flex:1; } .admin-top-meta .chip { display:none; } .admin-layout { padding-top:18px; } }
+/* ---------- Topbar ---------- */
+.adm-top {
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--adm-panel) 88%, transparent);
+  backdrop-filter:saturate(160%) blur(12px);
+  border-bottom:1px solid var(--adm-border);
+}
+@supports not (backdrop-filter:blur(4px)) { .adm-top { background:var(--adm-panel); } }
+.adm-top-inner { width:min(1340px,94%); margin:0 auto; min-height:66px; display:flex; align-items:center; gap:18px; }
+.adm-top .brand { display:flex; align-items:center; gap:11px; color:var(--adm-text); flex:0 0 auto; }
+.adm-top .brand-logo {
+  width:38px; height:38px; border-radius:12px; display:grid; place-items:center;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal-500)); color:#fff; font-size:1.05rem;
+  box-shadow:0 6px 16px rgba(10,168,160,.28);
+}
+.adm-top .brand small { display:block; color:var(--adm-muted); font-size:.7rem; letter-spacing:.4px; }
+.adm-top .brand b { color:var(--adm-text); }
+
+.adm-search { position:relative; flex:1 1 auto; max-width:430px; margin-left:8px; }
+.adm-search input {
+  width:100%; padding:11px 64px 11px 40px; border-radius:12px;
+  border:1px solid var(--adm-border); background:var(--adm-soft); color:var(--adm-text);
+  font:500 .88rem inherit; transition:.18s;
+}
+.adm-search input::placeholder { color:var(--adm-muted); }
+.adm-search input:focus { outline:none; border-color:var(--blue-500); background:var(--adm-field); box-shadow:0 0 0 4px rgba(26,127,232,.13); }
+.adm-search .s-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--adm-muted); font-size:.9rem; }
+.adm-search kbd {
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  font:700 .68rem/1 inherit; color:var(--adm-muted); background:var(--adm-panel);
+  border:1px solid var(--adm-border); border-radius:6px; padding:5px 7px;
+}
+
+.adm-top-actions { display:flex; align-items:center; gap:9px; margin-left:auto; }
+.icon-btn {
+  position:relative; width:40px; height:40px; border-radius:12px; border:1px solid var(--adm-border);
+  background:var(--adm-panel); color:var(--adm-text); font-size:1rem; cursor:pointer; display:grid; place-items:center; transition:.18s;
+}
+.icon-btn:hover { background:var(--adm-soft); transform:translateY(-1px); border-color:var(--blue-500); }
+.icon-btn .dot {
+  position:absolute; top:-6px; right:-6px; min-width:19px; height:19px; padding:0 5px; border-radius:99px;
+  background:var(--danger); color:#fff; font:800 .66rem/19px inherit; text-align:center;
+  box-shadow:0 0 0 2px var(--adm-panel);
+}
+.icon-btn .dot[hidden] { display:none; }
+.adm-bell-wrap { position:relative; }
+.adm-pop {
+  position:absolute; right:0; top:52px; width:min(360px,88vw); background:var(--adm-panel);
+  border:1px solid var(--adm-border); border-radius:16px; box-shadow:0 22px 55px rgba(9,27,56,.22);
+  padding:14px; z-index:60; display:none; animation:fadeUp .18s;
+}
+.adm-pop.open { display:block; }
+.adm-pop h4 { margin:0 0 4px; font-size:.95rem; color:var(--adm-text); }
+.adm-pop-head { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; }
+.adm-pop-list { max-height:320px; overflow:auto; margin:0; padding:0; list-style:none; }
+.adm-pop-list li { display:flex; gap:10px; padding:10px 6px; border-top:1px solid var(--adm-line); font-size:.83rem; }
+.adm-pop-list li .ico { width:30px; height:30px; flex:0 0 30px; border-radius:9px; display:grid; place-items:center; background:var(--blue-100); color:var(--blue-700); }
+.adm-pop-list li time { display:block; font-size:.7rem; color:var(--adm-muted); }
+.adm-pop-list li.unread { background:var(--blue-50); border-radius:10px; }
+.adm-pop-foot { display:flex; gap:8px; margin-top:10px; }
+
+.adm-burger { display:none; width:40px; height:40px; border-radius:12px; border:1px solid var(--adm-border); background:var(--adm-panel); color:var(--adm-text); font-size:1.05rem; cursor:pointer; }
+.adm-avatar {
+  width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
+  background:linear-gradient(135deg,var(--blue-800),var(--teal-500)); color:#fff; font:800 .8rem inherit; letter-spacing:.5px;
+}
+
+/* ---------- Layout ---------- */
+.adm-layout {
+  width:min(1340px,94%); margin:0 auto;
+  display:grid; grid-template-columns:262px minmax(0,1fr); gap:24px;
+  padding:26px 0 60px; align-items:start;
+}
+.adm-side { position:sticky; top:88px; display:flex; flex-direction:column; gap:16px; }
+.adm-side-backdrop { display:none; }
+
+.adm-nav {
+  background:var(--adm-panel); border:1px solid var(--adm-border); border-radius:20px;
+  padding:10px; box-shadow:var(--adm-shadow);
+}
+.adm-nav-label {
+  display:block; padding:8px 12px 6px; font:800 .66rem/1 inherit; letter-spacing:1.4px;
+  color:var(--adm-muted); text-transform:uppercase;
+}
+.adm-nav button {
+  width:100%; display:flex; align-items:center; gap:11px; border:0; background:transparent;
+  color:var(--adm-muted); font:700 .88rem inherit; text-align:left; padding:11px 12px;
+  border-radius:12px; cursor:pointer; transition:.16s; margin-bottom:2px;
+}
+.adm-nav button .ico {
+  width:30px; height:30px; flex:0 0 30px; border-radius:9px; display:grid; place-items:center;
+  background:var(--adm-soft); border:1px solid var(--adm-line); font-size:.9rem; transition:.16s;
+}
+.adm-nav button .lbl { flex:1; }
+.adm-nav button .nb {
+  font:800 .68rem/1 inherit; background:var(--blue-100); color:var(--blue-700);
+  border-radius:99px; padding:5px 8px; min-width:24px; text-align:center;
+}
+.adm-nav button:hover { background:var(--adm-soft); color:var(--adm-text); }
+.adm-nav button.active {
+  background:linear-gradient(100deg,var(--blue-700),var(--teal-500));
+  color:#fff; box-shadow:0 10px 22px rgba(18,80,155,.28);
+}
+.adm-nav button.active .ico { background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.3); color:#fff; }
+.adm-nav button.active .nb { background:rgba(255,255,255,.22); color:#fff; }
+
+.adm-cta {
+  border-radius:20px; padding:18px; color:#fff; border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(150deg,#0b2d5c 0%,#12509b 55%,#0aa8a0 130%);
+  box-shadow:0 14px 30px rgba(11,45,92,.24);
+}
+.adm-cta h4 { margin:0 0 4px; font-size:.95rem; }
+.adm-cta p { margin:0 0 12px; font-size:.78rem; color:#bfe4ff; line-height:1.5; }
+.adm-cta .btn { width:100%; margin-bottom:8px; }
+.adm-cta .btn:last-child { margin-bottom:0; }
+.adm-cta .btn.soft { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.28); }
+.adm-cta .btn.soft:hover { background:rgba(255,255,255,.22); }
+
+.adm-side-user {
+  display:flex; gap:11px; align-items:center; background:var(--adm-panel);
+  border:1px solid var(--adm-border); border-radius:18px; padding:13px 14px; box-shadow:var(--adm-shadow);
+}
+.adm-side-user .av { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; background:var(--blue-100); color:var(--blue-700); font:800 .8rem inherit; }
+.adm-side-user b { display:block; font-size:.86rem; color:var(--adm-text); }
+.adm-side-user span { font-size:.72rem; color:var(--adm-muted); }
+
+/* ---------- Sections ---------- */
+.adm-main { min-width:0; }
+.adm-sec { display:none; }
+.adm-sec.active { display:block; animation:fadeUp .3s; }
+.adm-head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:18px; }
+.adm-head .eyebrow { color:var(--teal-600); }
+.adm-head h1 { font-size:clamp(1.5rem,2.6vw,1.95rem); letter-spacing:-.5px; color:var(--adm-text); margin:2px 0 4px; }
+.adm-head p { margin:0; color:var(--adm-muted); font-size:.88rem; max-width:62ch; }
+.adm-head-actions { display:flex; gap:9px; flex-wrap:wrap; }
+.adm .btn { border-radius:11px; font-weight:700; }
+.adm .btn.ghost { border-color:var(--adm-border); color:var(--adm-text); background:var(--adm-panel); }
+.adm .btn.ghost:hover { border-color:var(--blue-500); color:var(--blue-600); background:var(--adm-soft); }
+.adm .card {
+  background:var(--adm-panel); border:1px solid var(--adm-border); border-radius:18px;
+  box-shadow:var(--adm-shadow); padding:20px;
+}
+.adm .card h3 { color:var(--adm-text); }
+.adm .card-header .sub { color:var(--adm-muted); }
+.adm .muted { color:var(--adm-muted); }
+
+/* ---------- Hero ---------- */
+.adm-hero {
+  position:relative; overflow:hidden; border-radius:22px; padding:26px 26px 22px; color:#fff;
+  background:linear-gradient(120deg,#081c3d 0%,#0f3b77 46%,#0a8f8a 120%);
+  box-shadow:0 20px 45px rgba(9,35,79,.28);
+}
+.adm-hero::before, .adm-hero::after {
+  content:""; position:absolute; border-radius:50%; pointer-events:none;
+}
+.adm-hero::before { width:260px; height:260px; right:-70px; top:-120px; background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%); }
+.adm-hero::after { width:340px; height:340px; left:-140px; bottom:-190px; background:radial-gradient(circle,rgba(10,168,160,.35),transparent 70%); }
+.adm-hero-top { position:relative; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+.adm-kicker { font:800 .68rem/1 inherit; letter-spacing:2px; color:#7fe4dc; }
+.adm-hero h1 { position:relative; font-size:clamp(1.35rem,2.6vw,1.85rem); margin:8px 0 6px; color:#fff; letter-spacing:-.4px; }
+.adm-hero p { position:relative; margin:0; font-size:.86rem; color:#c8ddf7; max-width:64ch; }
+.adm-hero-actions { position:relative; display:flex; gap:9px; flex-wrap:wrap; margin-top:16px; }
+.adm-hero-actions .btn { padding:9px 16px; font-size:.83rem; }
+.adm-hero-actions .btn.white { background:#fff; color:var(--blue-800); }
+.adm-hero-actions .btn.hero-ghost { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.35); }
+.adm-hero-actions .btn.hero-ghost:hover { background:rgba(255,255,255,.2); }
+.adm-hero-date {
+  position:relative; text-align:right; background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.22); border-radius:16px; padding:12px 16px; height:fit-content; backdrop-filter:blur(6px);
+}
+.adm-hero-date b { display:block; font-size:.95rem; }
+.adm-hero-date span { font-size:.72rem; color:#a9e7e2; }
+.adm-hero-stats {
+  position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:20px;
+}
+.adm-hero-stats .hs {
+  text-align:left; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.08);
+  border-radius:14px; padding:12px 14px; color:#fff; cursor:pointer; transition:.18s; backdrop-filter:blur(4px);
+}
+.adm-hero-stats .hs:hover { background:rgba(255,255,255,.18); transform:translateY(-2px); }
+.adm-hero-stats .hs b { display:block; font-size:1.2rem; letter-spacing:-.4px; }
+.adm-hero-stats .hs span { font-size:.7rem; color:#bfe4ff; }
+
+/* ---------- KPI ---------- */
+.adm-kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:18px; }
+.kpi {
+  position:relative; text-align:left; background:var(--adm-panel); border:1px solid var(--adm-border);
+  border-radius:18px; padding:17px 18px; cursor:pointer; box-shadow:var(--adm-shadow); transition:.2s; overflow:hidden;
+}
+.kpi:hover { transform:translateY(-3px); box-shadow:0 16px 34px rgba(13,38,78,.12); border-color:color-mix(in srgb, var(--k,#1666c4) 45%, var(--adm-border)); }
+.kpi::after {
+  content:""; position:absolute; right:-34px; bottom:-42px; width:110px; height:110px; border-radius:50%;
+  background:var(--k,#1666c4); opacity:.07;
+}
+.kpi .k-top { display:flex; align-items:center; gap:10px; }
+.kpi .k-ico {
+  width:38px; height:38px; border-radius:12px; display:grid; place-items:center; font-size:1rem;
+  background:color-mix(in srgb, var(--k,#1666c4) 14%, transparent); color:var(--k,#1666c4);
+}
+.kpi .k-label { font:800 .68rem/1.3 inherit; letter-spacing:.9px; text-transform:uppercase; color:var(--adm-muted); }
+.kpi .k-value { font-size:1.95rem; font-weight:800; letter-spacing:-1px; color:var(--adm-text); margin:10px 0 2px; line-height:1; }
+.kpi .k-foot { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:.74rem; color:var(--adm-muted); }
+.kpi .k-arrow { font-weight:800; color:var(--k,#1666c4); }
+
+/* ---------- Grids ---------- */
+.adm-grid { display:grid; gap:16px; margin-top:16px; }
+.adm-grid.g-2 { grid-template-columns:1.25fr 1fr; }
+.adm-grid.g-2e { grid-template-columns:1fr 1fr; }
+.adm-grid.g-3 { grid-template-columns:repeat(3,1fr); }
+
+/* ---------- Donut ---------- */
+.donut-wrap { display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
+.donut {
+  position:relative; width:172px; height:172px; border-radius:50%; flex:0 0 172px;
+  background:conic-gradient(var(--gray-200) 0 100%); transition:.3s;
+}
+.donut::after {
+  content:""; position:absolute; inset:22px; border-radius:50%; background:var(--adm-panel);
+  box-shadow:inset 0 0 0 1px var(--adm-line);
+}
+.donut-center { position:absolute; inset:0; display:grid; place-content:center; text-align:center; z-index:2; }
+.donut-center b { font-size:1.6rem; color:var(--adm-text); letter-spacing:-1px; line-height:1; }
+.donut-center span { font-size:.66rem; letter-spacing:1px; color:var(--adm-muted); text-transform:uppercase; }
+.legend { flex:1; min-width:190px; display:flex; flex-direction:column; gap:7px; }
+.legend-row {
+  display:flex; align-items:center; gap:10px; width:100%; border:1px solid transparent;
+  background:var(--adm-soft); border-radius:11px; padding:9px 12px; cursor:pointer; font:600 .82rem inherit;
+  color:var(--adm-text); transition:.15s;
+}
+.legend-row:hover { border-color:var(--adm-border); background:var(--adm-panel); transform:translateX(2px); }
+.legend-row.on { border-color:var(--adm-accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--adm-accent) 18%, transparent); }
+.legend-row .dot { width:10px; height:10px; border-radius:50%; flex:0 0 10px; }
+.legend-row .lbl { flex:1; text-align:left; }
+.legend-row b { font-weight:800; }
+
+/* ---------- Priority list ---------- */
+.prio-list { display:flex; flex-direction:column; gap:9px; }
+.prio-item {
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left; cursor:pointer;
+  border:1px solid var(--adm-border); background:var(--adm-soft); border-radius:14px; padding:11px 13px; transition:.16s;
+}
+.prio-item:hover { background:var(--adm-panel); border-color:var(--blue-500); transform:translateY(-1px); box-shadow:var(--adm-shadow); }
+.prio-item .p-ico { width:36px; height:36px; flex:0 0 36px; border-radius:11px; display:grid; place-items:center; background:var(--adm-panel); border:1px solid var(--adm-border); color:var(--blue-600); }
+.prio-item .p-body { flex:1; min-width:0; }
+.prio-item .p-body b { display:block; font-size:.85rem; color:var(--adm-text); }
+.prio-item .p-body span { font-size:.75rem; color:var(--adm-muted); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* ---------- Bars ---------- */
+.bars-mode { display:flex; gap:8px; }
+.chip-btn {
+  border:1px solid var(--adm-border); background:var(--adm-panel); color:var(--adm-muted);
+  font:700 .76rem inherit; padding:7px 13px; border-radius:99px; cursor:pointer; transition:.15s;
+}
+.chip-btn:hover { border-color:var(--blue-500); color:var(--blue-600); }
+.chip-btn.on { background:var(--blue-600); border-color:var(--blue-600); color:#fff; }
+.bars { display:flex; align-items:flex-end; gap:9px; height:168px; margin-top:20px; padding-bottom:24px; position:relative; }
+.bars .bar {
+  position:relative; flex:1; border-radius:9px 9px 4px 4px; min-height:8px; cursor:pointer;
+  background:linear-gradient(180deg,var(--blue-500),var(--blue-700)); transition:.2s;
+}
+.bars .bar.unpaid { background:linear-gradient(180deg,var(--amber),#d98f00); }
+.bars .bar:hover { filter:brightness(1.08); transform:translateY(-2px); }
+.bars .bar i {
+  position:absolute; top:-2px; left:50%; transform:translate(-50%,-100%); font-style:normal;
+  font:800 .68rem inherit; color:var(--adm-text); background:var(--adm-panel); border:1px solid var(--adm-border);
+  padding:3px 7px; border-radius:7px; opacity:0; transition:.15s; white-space:nowrap; pointer-events:none; z-index:3;
+}
+.bars .bar:hover i { opacity:1; }
+.bars .bar em {
+  position:absolute; bottom:-22px; left:0; right:0; text-align:center; font-style:normal;
+  font-size:.68rem; color:var(--adm-muted);
+}
+
+/* ---------- Feed / timeline ---------- */
+.feed { display:flex; flex-direction:column; }
+.feed-item { display:flex; gap:13px; padding:12px 2px; border-bottom:1px solid var(--adm-line); }
+.feed-item:last-child { border-bottom:0; }
+.feed-item .f-ico {
+  width:34px; height:34px; flex:0 0 34px; border-radius:10px; display:grid; place-items:center;
+  background:var(--blue-100); color:var(--blue-700); font-size:.86rem;
+}
+.feed-item .f-body { flex:1; min-width:0; }
+.feed-item .f-body b { font-size:.82rem; color:var(--adm-text); }
+.feed-item .f-body p { margin:2px 0 0; font-size:.78rem; color:var(--adm-muted); line-height:1.5; }
+.feed-item time { font-size:.68rem; color:var(--adm-muted); letter-spacing:.3px; }
+.feed-item .f-open { border:0; background:transparent; color:var(--blue-600); font:700 .74rem inherit; cursor:pointer; padding:0; }
+
+/* ---------- Toolbar / table ---------- */
+.toolbar {
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  background:var(--adm-soft); border:1px solid var(--adm-border); border-radius:15px; padding:12px; margin-bottom:14px;
+}
+.toolbar .input, .toolbar .select {
+  background:var(--adm-field); border-color:var(--adm-border); color:var(--adm-text);
+  min-height:40px; padding:9px 12px; font-size:.85rem; border-radius:10px;
+}
+.toolbar .grow { flex:1; min-width:200px; }
+.toolbar .spacer { flex:1; }
+.filter-chip {
+  display:none; align-items:center; gap:8px; background:var(--blue-100); color:var(--blue-700);
+  border:0; font:700 .76rem inherit; padding:8px 12px; border-radius:99px; cursor:pointer;
+}
+.filter-chip.show { display:inline-flex; }
+.adm-table { width:100%; font-size:.85rem; }
+.adm-table th { background:var(--adm-soft); color:var(--adm-muted); font-size:.68rem; letter-spacing:.7px; padding:12px; border-bottom:1px solid var(--adm-border); }
+.adm-table td { padding:12px; border-bottom:1px solid var(--adm-line); vertical-align:middle; color:var(--adm-text); }
+.adm-table tbody tr { transition:.12s; }
+.adm-table tbody tr:hover td { background:var(--adm-soft); }
+.adm-table tbody tr:last-child td { border-bottom:0; }
+.adm-table td small { display:block; color:var(--adm-muted); font-size:.72rem; margin-top:2px; }
+.adm-tid { font-weight:800; color:var(--blue-600); white-space:nowrap; font-size:.82rem; }
+.adm-table .select { min-width:150px; padding:8px 10px; font-size:.78rem; background:var(--adm-field); border-color:var(--adm-border); color:var(--adm-text); border-radius:9px; }
+.fee-cell { display:flex; gap:6px; align-items:center; }
+.fee-cell .input { width:112px; padding:8px 9px; font-size:.8rem; background:var(--adm-field); border-color:var(--adm-border); color:var(--adm-text); border-radius:9px; }
+.row-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.row-actions .btn { padding:7px 11px; font-size:.75rem; }
+.adm-empty { padding:34px 16px; text-align:center; color:var(--adm-muted); font-size:.86rem; }
+.table-foot { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-top:14px; font-size:.78rem; color:var(--adm-muted); }
+.pager { display:flex; gap:6px; align-items:center; }
+.pager button {
+  min-width:34px; height:34px; border-radius:10px; border:1px solid var(--adm-border); background:var(--adm-panel);
+  color:var(--adm-text); font:700 .78rem inherit; cursor:pointer; transition:.15s;
+}
+.pager button:hover:not(:disabled) { border-color:var(--blue-500); color:var(--blue-600); }
+.pager button.on { background:var(--blue-600); border-color:var(--blue-600); color:#fff; }
+.pager button:disabled { opacity:.4; cursor:not-allowed; }
+
+/* ---------- Service cards ---------- */
+.svc-stats { display:flex; gap:9px; flex-wrap:wrap; }
+.svc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin-top:16px; }
+.svc-card {
+  background:var(--adm-panel); border:1px solid var(--adm-border); border-radius:18px; padding:18px;
+  box-shadow:var(--adm-shadow); display:flex; flex-direction:column; transition:.2s; position:relative; overflow:hidden;
+}
+.svc-card::after {
+  content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--sc,#1666c4); opacity:0; transition:.2s;
+}
+.svc-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(13,38,78,.13); }
+.svc-card:hover::after { opacity:1; }
+.svc-top { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+.svc-ico {
+  width:44px; height:44px; border-radius:14px; display:grid; place-items:center; font-size:1.15rem;
+  background:color-mix(in srgb, var(--sc,#1666c4) 14%, transparent); color:var(--sc,#1666c4);
+}
+.svc-card h3 { font-size:1rem; margin:0 0 6px; color:var(--adm-text); letter-spacing:-.2px; }
+.svc-card p { margin:0 0 14px; font-size:.78rem; color:var(--adm-muted); line-height:1.55; flex:1; }
+.svc-meta { display:flex; gap:16px; padding:11px 0; border-top:1px dashed var(--adm-border); border-bottom:1px dashed var(--adm-border); margin-bottom:13px; }
+.svc-meta span { font-size:.72rem; color:var(--adm-muted); }
+.svc-meta b { display:block; font-size:1.05rem; color:var(--adm-text); }
+.svc-actions { display:flex; gap:8px; }
+.svc-actions .btn { flex:1; padding:9px 10px; font-size:.77rem; }
+
+/* ---------- Customer ---------- */
+.cust-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-top:16px; }
+.profile-card { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+.profile-av {
+  width:64px; height:64px; border-radius:20px; display:grid; place-items:center; font:800 1.25rem inherit;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal-500)); color:#fff; box-shadow:0 10px 22px rgba(10,168,160,.3);
+}
+.profile-body { flex:1; min-width:200px; }
+.profile-body h3 { margin:0 0 2px; font-size:1.1rem; }
+.profile-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px 14px; margin-top:14px; }
+.profile-facts .pf { background:var(--adm-soft); border:1px solid var(--adm-line); border-radius:12px; padding:10px 12px; }
+.profile-facts .pf span { display:block; font-size:.66rem; letter-spacing:.7px; text-transform:uppercase; color:var(--adm-muted); }
+.profile-facts .pf b { font-size:.85rem; color:var(--adm-text); word-break:break-word; }
+.profile-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; }
+
+.tarif-list { display:flex; flex-direction:column; gap:9px; }
+.tarif-item { border:1px solid var(--adm-border); border-radius:14px; overflow:hidden; background:var(--adm-soft); }
+.tarif-head {
+  width:100%; display:flex; align-items:center; gap:11px; border:0; background:transparent; cursor:pointer;
+  padding:12px 14px; text-align:left; font:700 .85rem inherit; color:var(--adm-text);
+}
+.tarif-head:hover { background:var(--adm-panel); }
+.tarif-head .tid {
+  font:800 .68rem/1 inherit; background:var(--blue-100); color:var(--blue-700); border-radius:7px; padding:6px 8px;
+}
+.tarif-head .tn { flex:1; }
+.tarif-head .caret { color:var(--adm-muted); transition:.2s; }
+.tarif-item.open .caret { transform:rotate(90deg); }
+.tarif-body { display:none; padding:0 14px 14px; font-size:.78rem; color:var(--adm-muted); line-height:1.6; }
+.tarif-item.open .tarif-body { display:block; animation:fadeUp .2s; }
+.tarif-body b { color:var(--adm-text); }
+
+/* ---------- Billing ---------- */
+.pay-cta { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.method-row { display:flex; gap:9px; flex-wrap:wrap; margin-top:12px; }
+.method {
+  border:1px dashed var(--adm-border); background:var(--adm-soft); border-radius:12px; padding:9px 13px;
+  font:700 .78rem inherit; color:var(--adm-muted);
+}
+
+/* ---------- Settings ---------- */
+.setting-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:16px; margin-top:16px; }
+.setting-row { display:flex; justify-content:space-between; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid var(--adm-line); flex-wrap:wrap; }
+.setting-row:last-child { border-bottom:0; }
+.setting-row .s-info b { display:block; font-size:.87rem; color:var(--adm-text); }
+.setting-row .s-info span { font-size:.76rem; color:var(--adm-muted); }
+.setting-row .select { min-width:170px; background:var(--adm-field); border-color:var(--adm-border); color:var(--adm-text); }
+.src-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+.src-list li { display:flex; gap:11px; align-items:flex-start; font-size:.8rem; color:var(--adm-muted); }
+.src-list li b { color:var(--adm-text); }
+.src-list .badge {
+  font:800 .66rem/1 inherit; background:var(--blue-100); color:var(--blue-700); border-radius:7px; padding:6px 8px; white-space:nowrap;
+}
+.adm-foot { margin-top:26px; text-align:center; font-size:.75rem; color:var(--adm-muted); }
+
+/* ---------- Responsive ---------- */
+@media (max-width:1180px) {
+  .adm-kpis { grid-template-columns:repeat(2,1fr); }
+  .adm-hero-stats { grid-template-columns:repeat(2,1fr); }
+  .svc-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:1024px) {
+  .adm-layout { grid-template-columns:1fr; }
+  .adm-burger { display:grid; }
+  .adm-side {
+    position:fixed; left:0; top:0; bottom:0; width:278px; z-index:70; padding:18px 14px;
+    background:var(--adm-bg); border-right:1px solid var(--adm-border); overflow-y:auto;
+    transform:translateX(-104%); transition:transform .26s ease;
+  }
+  .adm-side.open { transform:none; box-shadow:0 0 60px rgba(0,0,0,.35); }
+  .adm-side-backdrop { display:none; position:fixed; inset:0; background:rgba(8,17,33,.5); z-index:65; }
+  .adm-side-backdrop.show { display:block; }
+  .adm-grid.g-2, .adm-grid.g-2e, .adm-grid.g-3, .cust-grid, .setting-grid { grid-template-columns:1fr; }
+  .adm-search { max-width:none; }
+}
+@media (max-width:720px) {
+  .adm-kpis, .svc-grid { grid-template-columns:1fr; }
+  .adm-hero { padding:20px 18px; }
+  .adm-hero-date { text-align:left; }
+  .adm-search { display:none; }
+  .adm-top-actions .btn { display:none; }
+  .profile-facts { grid-template-columns:1fr; }
+  .toolbar .input, .toolbar .select, .toolbar .grow { width:100%; min-width:0; }
+}
 </style>
 </head>
-<body>
-<div class="admin-shell">
-  <header class="admin-top">
-    <div class="container admin-top-inner">
-      <a class="brand" href="index.html"><span class="brand-logo">✦</span><span>Perumda <b>Tirta Pakuan</b><small>Admin Operasional · Dummy</small></span></a>
-      <div class="admin-top-meta"><span class="admin-live">Sistem operasional aktif</span><span class="chip teal" style="background:#d6fff2;color:#087d70">MODE DEMO</span><a class="btn white small" href="dashboard.html">Dashboard pelanggan</a><a class="btn white small" href="index.html">Beranda</a></div>
+<body class="adm">
+
+<!-- ============ TOPBAR ============ -->
+<header class="adm-top">
+  <div class="adm-top-inner">
+    <button class="adm-burger" id="adm-burger" aria-label="Buka menu admin">☰</button>
+    <a class="brand" href="index.html">
+      <span class="brand-logo">✦</span>
+      <span>Perumda <b>Tirta Pakuan</b><small>Admin Operasional · Mode Demo</small></span>
+    </a>
+
+    <div class="adm-search">
+      <span class="s-ico">⌕</span>
+      <input id="global-search" placeholder="Cari tiket, nama, layanan, zona…" aria-label="Pencarian global" autocomplete="off">
+      <kbd>/</kbd>
     </div>
-  </header>
 
-  <div class="container admin-layout">
-    <aside class="admin-side">
-      <nav class="admin-nav" id="admin-nav" aria-label="Menu admin">
-        <button class="active" data-section="overview"><span class="ico">◪</span>Ringkasan</button>
-        <button data-section="tickets"><span class="ico">☏</span>Antrean Tiket</button>
-        <button data-section="services"><span class="ico">▦</span>Layanan</button>
-        <button data-section="activity"><span class="ico">♨</span>Aktivitas</button>
-        <button data-section="settings"><span class="ico">⚙</span>Pengaturan Demo</button>
-      </nav>
-      <div class="card" style="margin-top:16px;padding:16px"><b style="color:var(--blue-900)">Aksi cepat</b><p class="small muted">Buka formulir untuk membuat tiket uji dari sisi pelanggan.</p><a class="btn teal block small" href="ticketing.html#layanan-tiket">＋ Buat tiket dummy</a></div>
-    </aside>
-
-    <main class="dash-main">
-      <section class="admin-section active" id="admin-overview">
-        <div class="admin-section-head"><div><span class="eyebrow">PUSAT KENDALI OPERASIONAL</span><h1>Ringkasan hari ini</h1><p class="muted small">Pantau antrean, prioritas, dan progres penanganan tiket layanan.</p></div><span class="chip blue" id="today-label"></span></div>
-        <div class="admin-alert"><b>Data dummy lokal.</b> Perubahan status dan biaya tersimpan di <code>localStorage</code>, sehingga aman untuk simulasi alur admin.</div>
-        <div class="stat-grid admin-kpi">
-          <div class="stat-card"><div class="label">Total tiket</div><div class="value" id="kpi-total">0</div><div class="delta">Semua permohonan</div></div>
-          <div class="stat-card amber"><div class="label">Perlu verifikasi</div><div class="value" id="kpi-review">0</div><div class="delta">Butuh pemeriksaan</div></div>
-          <div class="stat-card teal"><div class="label">Sedang diproses</div><div class="value" id="kpi-process">0</div><div class="delta">Survey / penanganan</div></div>
-          <div class="stat-card green"><div class="label">Selesai</div><div class="value" id="kpi-done">0</div><div class="delta">Tiket terselesaikan</div></div>
+    <div class="adm-top-actions">
+      <div class="adm-bell-wrap">
+        <button class="icon-btn" id="bell-btn" aria-label="Notifikasi" aria-expanded="false">🔔<span class="dot" id="bell-count" hidden>0</span></button>
+        <div class="adm-pop" id="bell-pop" role="dialog" aria-label="Notifikasi">
+          <div class="adm-pop-head">
+            <div><h4>Notifikasi</h4><span class="small muted" id="bell-sub">Data dummy dari halaman dashboard</span></div>
+          </div>
+          <ul class="adm-pop-list" id="bell-list"></ul>
+          <div class="adm-pop-foot">
+            <button class="btn small" id="bell-read" style="flex:1">✓ Tandai dibaca</button>
+            <button class="btn ghost small" id="bell-clear" style="flex:1">Bersihkan</button>
+          </div>
         </div>
-        <div class="dash-grid-2" style="margin-top:20px">
-          <div class="card"><div class="card-header"><div><h3>Prioritas antrean</h3><div class="sub">Tiket aktif yang perlu perhatian petugas.</div></div><button class="btn ghost small" data-go="tickets">Kelola tiket →</button></div><div id="priority-list"></div></div>
-          <div class="card"><div class="card-header"><div><h3>Distribusi status</h3><div class="sub">Komposisi tiket pada database dummy.</div></div></div><div id="status-chart"></div></div>
-        </div>
-      </section>
-
-      <section class="admin-section" id="admin-tickets">
-        <div class="admin-section-head"><div><span class="eyebrow">WORK QUEUE</span><h1>Antrean tiket</h1><p class="muted small">Periksa data, ubah status, tetapkan biaya, dan buka detail tiket.</p></div><button class="btn teal" data-go="overview">← Ringkasan</button></div>
-        <div class="card"><div class="admin-toolbar" style="margin-bottom:16px"><input class="input" id="ticket-search" placeholder="Cari ID, nama, layanan..." aria-label="Cari tiket"><select class="select" id="ticket-status"><option value="semua">Semua status</option></select><select class="select" id="ticket-type"><option value="semua">Semua jenis</option><option value="jasa">Jasa</option><option value="keluhan">Keluhan</option></select></div><div class="table-wrap"><table class="table admin-ticket-table"><thead><tr><th>Tiket</th><th>Pemohon</th><th>Layanan</th><th>Prioritas</th><th>Status</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody id="ticket-table-body"></tbody></table></div></div>
-      </section>
-
-      <section class="admin-section" id="admin-services">
-        <div class="admin-section-head"><div><span class="eyebrow">SERVICE CONTROL</span><h1>Kontrol layanan</h1><p class="muted small">Ringkasan performa dummy berdasarkan tiket yang masuk.</p></div></div>
-        <div class="card"><div class="card-header"><div><h3>Katalog layanan</h3><div class="sub">Klik jumlah aktif untuk melihat antrean terkait.</div></div></div><div id="service-list"></div></div>
-      </section>
-
-      <section class="admin-section" id="admin-activity">
-        <div class="admin-section-head"><div><span class="eyebrow">AUDIT TRAIL</span><h1>Aktivitas terbaru</h1><p class="muted small">Riwayat perubahan status dan pembaruan data dari tiket dummy.</p></div></div>
-        <div class="card"><ul class="admin-log" id="activity-list"></ul></div>
-      </section>
-
-      <section class="admin-section" id="admin-settings">
-        <div class="admin-section-head"><div><span class="eyebrow">DEMO CONFIGURATION</span><h1>Pengaturan demo</h1><p class="muted small">Kontrol data simulasi sebelum integrasi ke backend resmi.</p></div></div>
-        <div class="card" style="max-width:680px"><div class="card-header"><div><h3>Database lokal</h3><div class="sub">Data hanya disimpan pada browser saat ini.</div></div><span class="chip teal">Aktif</span></div><div class="field"><label>Key penyimpanan</label><input class="input" value="tirtapakuan_db_v1" disabled></div><div class="field"><label>Peran demo</label><select class="select" id="demo-role"><option value="admin">Admin</option><option value="petugas">Petugas</option><option value="pelanggan">Pelanggan</option></select></div><button class="btn danger" id="reset-demo">Reset data dummy</button><p class="small muted" style="margin:12px 0 0">Reset akan menghapus perubahan tiket lokal dan mengembalikan satu tiket contoh awal.</p></div>
-      </section>
-    </main>
+      </div>
+      <button class="icon-btn" id="theme-btn" aria-label="Ganti tema" title="Mode terang / gelap">◐</button>
+      <a class="btn ghost small" href="dashboard.html">Dashboard</a>
+      <a class="btn small" href="ticketing.html#layanan-tiket">＋ Tiket</a>
+      <span class="adm-avatar" title="Administrator demo">AD</span>
+    </div>
   </div>
+</header>
+
+<div class="adm-side-backdrop" id="side-backdrop"></div>
+
+<div class="adm-layout">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="adm-side" id="adm-side">
+    <nav class="adm-nav" id="adm-nav" aria-label="Menu admin">
+      <span class="adm-nav-label">Operasional</span>
+      <button class="active" data-sec="ringkasan"><span class="ico">◈</span><span class="lbl">Ringkasan</span></button>
+      <button data-sec="tiket"><span class="ico">☏</span><span class="lbl">Antrean Tiket</span><span class="nb" id="nb-tiket">0</span></button>
+      <button data-sec="layanan"><span class="ico">▦</span><span class="lbl">Layanan</span><span class="nb" id="nb-layanan">0</span></button>
+      <button data-sec="pelanggan"><span class="ico">◉</span><span class="lbl">Pelanggan</span></button>
+      <button data-sec="tagihan"><span class="ico">▧</span><span class="lbl">Tagihan</span><span class="nb" id="nb-tagihan">0</span></button>
+      <span class="adm-nav-label">Sistem</span>
+      <button data-sec="aktivitas"><span class="ico">♨</span><span class="lbl">Aktivitas</span><span class="nb" id="nb-aktivitas">0</span></button>
+      <button data-sec="pengaturan"><span class="ico">⚙</span><span class="lbl">Pengaturan Demo</span></button>
+    </nav>
+
+    <div class="adm-cta">
+      <h4>Aksi cepat</h4>
+      <p>Semua aksi berikut memakai data dummy lokal — aman untuk simulasi alur admin.</p>
+      <button class="btn white" id="cta-new-ticket">＋ Buat tiket dummy</button>
+      <a class="btn soft" href="ticketing.html#layanan-tiket">Buka pusat layanan →</a>
+      <a class="btn soft" href="layanan.html">Katalog layanan →</a>
+    </div>
+
+    <div class="adm-side-user">
+      <span class="av">AD</span>
+      <div><b>Administrator</b><span>Sesi demo · role admin</span></div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="adm-main">
+
+    <!-- ===== RINGKASAN ===== -->
+    <section class="adm-sec active" id="sec-ringkasan">
+      <div class="adm-hero">
+        <div class="adm-hero-top">
+          <div>
+            <span class="adm-kicker">PUSAT KENDALI OPERASIONAL</span>
+            <h1 id="hero-greet">Selamat datang kembali 👋</h1>
+            <p>Pantau antrean tiket layanan, tagihan pelanggan, dan katalog layanan — seluruh angka di halaman ini diambil dari data halaman Beranda, Layanan, Ticketing, dan Dashboard.</p>
+            <div class="adm-hero-actions">
+              <button class="btn white" id="hero-new">＋ Tiket dummy</button>
+              <a class="btn white" href="ticketing.html#layanan-tiket" style="background:#fff;color:#0f3b77">Buat tiket asli</a>
+              <button class="btn hero-ghost" id="hero-refresh">⟳ Segarkan data</button>
+            </div>
+          </div>
+          <div class="adm-hero-date"><b id="hero-date">—</b><span>Mode demo · data tersimpan lokal</span></div>
+        </div>
+        <div class="adm-hero-stats">
+          <button class="hs" data-goto="pelanggan"><b>221.320</b><span>Pelanggan aktif (Beranda)</span></button>
+          <button class="hs" data-goto="tagihan"><b id="hero-unpaid">Rp 0</b><span>Tagihan belum dibayar (Dashboard)</span></button>
+          <button class="hs" data-goto="tiket"><b id="hero-running">0</b><span>Tiket sedang berjalan</span></button>
+          <button class="hs" data-goto="layanan"><b id="hero-svc">0</b><span>Jenis layanan (Layanan)</span></button>
+        </div>
+      </div>
+
+      <div class="adm-kpis">
+        <button class="kpi" style="--k:#1666c4" data-kpi="semua">
+          <div class="k-top"><span class="k-ico">☏</span><span class="k-label">Total tiket</span></div>
+          <div class="k-value" id="kpi-total">0</div>
+          <div class="k-foot"><span>Seluruh permohonan &amp; keluhan</span><span class="k-arrow">→</span></div>
+        </button>
+        <button class="kpi" style="--k:#f5a623" data-kpi="menunggu">
+          <div class="k-top"><span class="k-ico">◔</span><span class="k-label">Perlu verifikasi</span></div>
+          <div class="k-value" id="kpi-review">0</div>
+          <div class="k-foot"><span>Menunggu pemeriksaan petugas</span><span class="k-arrow">→</span></div>
+        </button>
+        <button class="kpi" style="--k:#0aa8a0" data-kpi="proses">
+          <div class="k-top"><span class="k-ico">⚙</span><span class="k-label">Sedang diproses</span></div>
+          <div class="k-value" id="kpi-process">0</div>
+          <div class="k-foot"><span>Survey / penanganan / bayar</span><span class="k-arrow">→</span></div>
+        </button>
+        <button class="kpi" style="--k:#2e9d5b" data-kpi="fee">
+          <div class="k-top"><span class="k-ico">✓</span><span class="k-label">Biaya terkumpul</span></div>
+          <div class="k-value" id="kpi-fee" style="font-size:1.5rem">Rp 0</div>
+          <div class="k-foot"><span id="kpi-fee-sub">Dari tiket jasa</span><span class="k-arrow">→</span></div>
+        </button>
+      </div>
+
+      <div class="adm-grid g-2">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>◈ Distribusi status tiket</h3><div class="sub">Klik salah satu bagian untuk menyaring antrean tiket.</div></div>
+            <button class="btn ghost small" data-goto="tiket">Kelola →</button>
+          </div>
+          <div class="donut-wrap">
+            <div class="donut" id="donut"><div class="donut-center"><b id="donut-total">0</b><span>Tiket</span></div></div>
+            <div class="legend" id="donut-legend"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><h3>⚡ Prioritas antrean</h3><div class="sub">Tiket aktif yang paling perlu perhatian.</div></div>
+            <button class="btn ghost small" data-goto="tiket">Semua →</button>
+          </div>
+          <div class="prio-list" id="prio-list"></div>
+        </div>
+      </div>
+
+      <div class="adm-grid g-2e">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>≋ Pemakaian &amp; tagihan air</h3><div class="sub">Data dari Dashboard pelanggan — klik bar untuk detail.</div></div>
+            <div class="bars-mode">
+              <button class="chip-btn on" data-bars="m3">m³</button>
+              <button class="chip-btn" data-bars="tagihan">Rp</button>
+            </div>
+          </div>
+          <div class="bars" id="usage-bars"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><h3>♨ Aktivitas terbaru</h3><div class="sub">Gabungan riwayat tiket &amp; notifikasi.</div></div>
+            <button class="btn ghost small" data-goto="aktivitas">Semua →</button>
+          </div>
+          <div class="feed" id="recent-feed"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TIKET ===== -->
+    <section class="adm-sec" id="sec-tiket">
+      <div class="adm-head">
+        <div>
+          <span class="eyebrow">WORK QUEUE</span>
+          <h1>Antrean tiket</h1>
+          <p>Data realtime dari halaman Ticketing &amp; Dashboard. Ubah status, tetapkan biaya, proses cepat, atau buka detail tiket.</p>
+        </div>
+        <div class="adm-head-actions">
+          <button class="btn ghost" id="t-export">⇩ Export CSV</button>
+          <button class="btn ghost" id="t-reset-filter">↺ Reset filter</button>
+          <button class="btn" id="t-new">＋ Tiket dummy</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="toolbar">
+          <input class="input grow" id="t-search" placeholder="Cari ID, nama, layanan, zona, no. pelanggan…" aria-label="Cari tiket" autocomplete="off">
+          <select class="select" id="t-status" aria-label="Filter status"><option value="semua">Semua status</option></select>
+          <select class="select" id="t-type" aria-label="Filter jenis">
+            <option value="semua">Semua jenis</option>
+            <option value="jasa">Jasa</option>
+            <option value="keluhan">Keluhan</option>
+          </select>
+          <select class="select" id="t-prio" aria-label="Filter prioritas">
+            <option value="semua">Semua prioritas</option>
+            <option value="Sangat Tinggi">Sangat Tinggi</option>
+            <option value="Tinggi">Tinggi</option>
+            <option value="Normal">Normal</option>
+            <option value="Rendah">Rendah</option>
+          </select>
+          <button class="filter-chip" id="chip-group"></button>
+          <button class="filter-chip" id="chip-svc"></button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table adm-table">
+            <thead>
+              <tr>
+                <th>Tiket</th><th>Pemohon</th><th>Layanan</th><th>Prioritas</th>
+                <th>Status</th><th>Biaya</th><th style="text-align:right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="t-body"></tbody>
+          </table>
+        </div>
+
+        <div class="table-foot">
+          <span id="t-count">—</span>
+          <div class="pager" id="t-pager"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LAYANAN ===== -->
+    <section class="adm-sec" id="sec-layanan">
+      <div class="adm-head">
+        <div>
+          <span class="eyebrow">SERVICE CATALOG</span>
+          <h1>Kontrol layanan</h1>
+          <p>Katalog dari halaman Layanan — lihat detail syarat/kontrak layanan atau masuk ke antrean tiket per layanan.</p>
+        </div>
+        <div class="adm-head-actions">
+          <a class="btn ghost" href="layanan.html">Buka katalog publik</a>
+          <a class="btn" href="ticketing.html#layanan-tiket">＋ Ajukan layanan</a>
+        </div>
+      </div>
+
+      <div class="svc-stats" id="svc-stats"></div>
+      <div class="svc-grid" id="svc-grid"></div>
+    </section>
+
+    <!-- ===== PELANGGAN ===== -->
+    <section class="adm-sec" id="sec-pelanggan">
+      <div class="adm-head">
+        <div>
+          <span class="eyebrow">CUSTOMER DATA</span>
+          <h1>Data pelanggan</h1>
+          <p>Profil dari Dashboard pelanggan, ditambah pelanggan unik yang muncul pada tiket. Klik baris untuk melihat tiketnya.</p>
+        </div>
+        <div class="adm-head-actions">
+          <a class="btn ghost" href="dashboard.html">Buka dashboard</a>
+        </div>
+      </div>
+
+      <div class="adm-kpis" style="margin-top:0">
+        <button class="kpi" style="--k:#1666c4" data-goto="tiket">
+          <div class="k-top"><span class="k-ico">◉</span><span class="k-label">Pelanggan tercatat</span></div>
+          <div class="k-value" id="c-total">0</div>
+          <div class="k-foot"><span>Unik dari seluruh tiket</span><span class="k-arrow">→</span></div>
+        </button>
+        <button class="kpi" style="--k:#0aa8a0" data-goto="tiket">
+          <div class="k-top"><span class="k-ico">⚙</span><span class="k-label">Sedang aktif</span></div>
+          <div class="k-value" id="c-active">0</div>
+          <div class="k-foot"><span>Punya tiket berjalan</span><span class="k-arrow">→</span></div>
+        </button>
+        <button class="kpi" style="--k:#f5a623" data-goto="tagihan">
+          <div class="k-top"><span class="k-ico">≋</span><span class="k-label">Rata-rata pemakaian</span></div>
+          <div class="k-value" id="c-avg">0</div>
+          <div class="k-foot"><span>m³ / bulan (6 bulan)</span><span class="k-arrow">→</span></div>
+        </button>
+        <button class="kpi" style="--k:#2e9d5b" data-goto="layanan">
+          <div class="k-top"><span class="k-ico">▦</span><span class="k-label">Golongan tarif</span></div>
+          <div class="k-value" id="c-tarif">0</div>
+          <div class="k-foot"><span>Jenis pelanggan terdaftar</span><span class="k-arrow">→</span></div>
+        </button>
+      </div>
+
+      <div class="cust-grid">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>◉ Daftar pelanggan</h3><div class="sub">Gabungan data profil &amp; pemohon tiket.</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="table adm-table">
+              <thead><tr><th>No. Pelanggan</th><th>Nama</th><th>Zona</th><th>Tiket</th><th>Status</th><th style="text-align:right">Aksi</th></tr></thead>
+              <tbody id="c-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Profil utama</h3><div class="sub">Dari menu Profil Dashboard pelanggan.</div></div>
+              <span class="chip teal" id="pf-status">Aktif</span>
+            </div>
+            <div class="profile-card">
+              <span class="profile-av" id="pf-av">BS</span>
+              <div class="profile-body">
+                <h3 id="pf-nama">—</h3>
+                <span class="muted small" id="pf-nopel">—</span>
+                <div class="profile-facts">
+                  <div class="pf"><span>Zona</span><b id="pf-zona">—</b></div>
+                  <div class="pf"><span>Tarif</span><b id="pf-tarif">—</b></div>
+                  <div class="pf" style="grid-column:1/-1"><span>Alamat</span><b id="pf-alamat">—</b></div>
+                </div>
+                <div class="profile-actions">
+                  <button class="btn small" id="pf-open-tickets">Lihat tiket →</button>
+                  <a class="btn ghost small" href="dashboard.html?view=profil">Edit di dashboard</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div><h3>▧ Golongan tarif</h3><div class="sub">Dari form tiket — klik untuk detail.</div></div>
+            </div>
+            <div class="tarif-list" id="tarif-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-header">
+          <div><h3>≋ Riwayat pemakaian air</h3><div class="sub">6 bulan terakhir — sama dengan data Dashboard pelanggan.</div></div>
+          <a class="btn ghost small" href="dashboard.html?view=pemakaian">Detail di dashboard →</a>
+        </div>
+        <div class="bars" id="usage-bars-2"></div>
+        <div class="table-wrap" style="margin-top:8px">
+          <table class="table adm-table">
+            <thead><tr><th>Bulan</th><th>Pemakaian</th><th>Estimasi tagihan</th><th>Status</th></tr></thead>
+            <tbody id="usage-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAGIHAN ===== -->
+    <section class="adm-sec" id="sec-tagihan">
+      <div class="adm-head">
+        <div>
+          <span class="eyebrow">BILLING &amp; COLLECTION</span>
+          <h1>Tagihan &amp; pembayaran</h1>
+          <p>Rekap rekening air dari halaman Dashboard — simulasi penagihan, pengingat, dan kanal pembayaran (dummy).</p>
+        </div>
+        <div class="adm-head-actions">
+          <button class="btn ghost" id="bill-remind-all">✉ Ingatkan semua</button>
+          <a class="btn" href="dashboard.html?view=tagihan">Buka riwayat rekening</a>
+        </div>
+      </div>
+
+      <div class="adm-kpis" style="margin-top:0">
+        <div class="kpi" style="--k:#e5403c;cursor:default">
+          <div class="k-top"><span class="k-ico">⚠</span><span class="k-label">Belum dibayar</span></div>
+          <div class="k-value" id="b-unpaid">Rp 0</div>
+          <div class="k-foot"><span id="b-unpaid-sub">— periode</span></div>
+        </div>
+        <div class="kpi" style="--k:#2e9d5b;cursor:default">
+          <div class="k-top"><span class="k-ico">✓</span><span class="k-label">Total terbayar</span></div>
+          <div class="k-value" id="b-paid">Rp 0</div>
+          <div class="k-foot"><span>6 bulan berjalan</span></div>
+        </div>
+        <div class="kpi" style="--k:#1666c4;cursor:default">
+          <div class="k-top"><span class="k-ico">≈</span><span class="k-label">Rata-rata / bulan</span></div>
+          <div class="k-value" id="b-avg">Rp 0</div>
+          <div class="k-foot"><span>Seluruh periode</span></div>
+        </div>
+        <div class="kpi" style="--k:#f5a623;cursor:default">
+          <div class="k-top"><span class="k-ico">◔</span><span class="k-label">Jatuh tempo</span></div>
+          <div class="k-value" id="b-due" style="font-size:1.5rem">—</div>
+          <div class="k-foot"><span>Batas pembayaran berikutnya</span></div>
+        </div>
+      </div>
+
+      <div class="adm-grid g-2">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>▧ Riwayat rekening</h3><div class="sub">Kirim pengingat untuk periode yang belum lunas.</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="table adm-table">
+              <thead><tr><th>Periode</th><th>Pemakaian</th><th class="right">Nominal</th><th>Status</th><th style="text-align:right">Aksi</th></tr></thead>
+              <tbody id="b-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><h3>💳 Kanal pembayaran</h3><div class="sub">Simulasi kanal resmi (dummy).</div></div>
+            <span class="chip blue">Virtual Account / QRIS</span>
+          </div>
+          <p class="small muted" style="margin-top:0">Bayar lewat mitra PPOB: bank bjb, BTN, BRI, Pos Indonesia, Indomaret, Alfamart, atau aplikasi SIMOTIP.</p>
+          <div class="pay-cta">
+            <button class="btn teal" id="pay-now">Bayar sekarang (demo)</button>
+            <button class="btn ghost" id="pay-instr">Kirim instruksi</button>
+          </div>
+          <div class="method-row">
+            <span class="method">bank bjb</span><span class="method">Bank BTN</span><span class="method">Bank BRI</span>
+            <span class="method">Pos Indonesia</span><span class="method">QRIS</span><span class="method">SIMOTIP</span>
+          </div>
+          <div class="card" style="margin-top:16px;background:var(--adm-soft);box-shadow:none">
+            <div class="card-header"><div><h3 style="font-size:.95rem">☏ Tagihan jasa tiket</h3><div class="sub">Akumulasi biaya layanan yang sudah ditetapkan admin.</div></div></div>
+            <div class="setting-row"><div class="s-info"><b>Biaya terkumpul</b><span>Dari seluruh tiket jasa</span></div><b id="b-fee">Rp 0</b></div>
+            <div class="setting-row"><div class="s-info"><b>Tiket belum ada biaya</b><span>Perlu penetapan petugas</span></div><b id="b-nofee">0</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== AKTIVITAS ===== -->
+    <section class="adm-sec" id="sec-aktivitas">
+      <div class="adm-head">
+        <div>
+          <span class="eyebrow">AUDIT TRAIL</span>
+          <h1>Aktivitas terbaru</h1>
+          <p>Riwayat perubahan status tiket dan notifikasi yang sama dengan tampilan di Dashboard pelanggan.</p>
+        </div>
+        <div class="adm-head-actions">
+          <div class="svc-stats" id="act-tabs">
+            <button class="chip-btn on" data-act="semua">Semua</button>
+            <button class="chip-btn" data-act="tiket">Tiket</button>
+            <button class="chip-btn" data-act="notifikasi">Notifikasi</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><h3>♨ Log operasional</h3><div class="sub" id="act-count">—</div></div>
+          <button class="btn ghost small" id="act-clear">Bersihkan notifikasi</button>
+        </div>
+        <div class="feed" id="act-list"></div>
+      </div>
+    </section>
+
+    <!-- ===== PENGATURAN ===== -->
+    <section class="adm-sec" id="sec-pengaturan">
+      <div class="adm-head">
+        <div>
+          <span class="eyebrow">DEMO CONFIGURATION</span>
+          <h1>Pengaturan demo</h1>
+          <p>Kontrol data simulasi sebelum integrasi ke backend resmi. Semua perubahan hanya tersimpan di browser ini.</p>
+        </div>
+      </div>
+
+      <div class="setting-grid">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>⚙ Preferensi tampilan &amp; sesi</h3><div class="sub">Berlaku selama halaman ini dibuka.</div></div>
+            <span class="chip teal">Aktif</span>
+          </div>
+          <div class="setting-row">
+            <div class="s-info"><b>Tema tampilan</b><span>Mode terang atau gelap untuk halaman admin.</span></div>
+            <select class="select" id="set-theme">
+              <option value="light">◐ Terang</option>
+              <option value="dark">◑ Gelap</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div class="s-info"><b>Peran demo</b><span>Mengubah hak aksi pada modal tiket.</span></div>
+            <select class="select" id="set-role">
+              <option value="admin">✦ Admin</option>
+              <option value="petugas">🛠 Petugas</option>
+              <option value="pelanggan">👤 Pelanggan</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <div class="s-info"><b>Key penyimpanan</b><span>Database dummy di localStorage.</span></div>
+            <b style="font-size:.82rem" id="set-key">tirtapakuan_db_v1</b>
+          </div>
+          <div class="setting-row">
+            <div class="s-info"><b>Ukuran data</b><span>Jumlah tiket &amp; notifikasi tersimpan.</span></div>
+            <b style="font-size:.82rem" id="set-size">—</b>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><h3>⌁ Sumber data</h3><div class="sub">Halaman lain yang menjadi acuan angka di admin ini.</div></div>
+          </div>
+          <ul class="src-list">
+            <li><span class="badge">ticketing.html</span><div><b>Tiket &amp; formulir layanan</b> — status, prioritas, biaya, timeline, katalog jasa/keluhan.</div></li>
+            <li><span class="badge">dashboard.html</span><div><b>Profil pelanggan</b> — no. pelanggan, zona, tarif, riwayat pemakaian, tagihan, notifikasi.</div></li>
+            <li><span class="badge">layanan.html</span><div><b>Katalog layanan</b> — 12 jenis layanan jasa &amp; keluhan beserta deskripsinya.</div></li>
+            <li><span class="badge">index.html</span><div><b>Statistik perusahaan</b> — 221.320 pelanggan aktif, kapasitas, kontinuitas layanan.</div></li>
+            <li><span class="badge">js/main.js</span><div><b>Store bersama (TP)</b> — database localStorage, golongan tarif, helper.</div></li>
+          </ul>
+          <div class="pay-cta" style="margin-top:16px">
+            <button class="btn" id="set-new">＋ Tiket dummy</button>
+            <button class="btn ghost" id="set-clear-notif">Bersihkan notifikasi</button>
+            <button class="btn danger" id="set-reset">↺ Reset data dummy</button>
+          </div>
+          <p class="small muted" style="margin-bottom:0">Reset menghapus seluruh perubahan lokal dan mengembalikan tiket contoh awal.</p>
+        </div>
+      </div>
+
+      <div class="adm-foot">© 2026 Perumda Tirta Pakuan Kota Bogor — Halaman admin pengembangan (dummy, data lokal).</div>
+    </section>
+
+  </main>
 </div>
+
 <div id="toast-wrap"></div>
+
 <script src="js/main.js"></script>
 <script>
 (function () {
   const TP = window.TP;
   TP.ensureSpace();
   window.TP_CURRENT_ROLE = "admin";
+
   const $ = (id) => document.getElementById(id);
-  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const statusClass = (status) => (TP.STATUS_META[status] || { chip: "gray" }).chip;
-  const priorityClass = (priority) => (TP.PRIORITY_META[priority] || { chip: "gray" }).chip;
-  const flow = (ticket) => ticket.type === "keluhan" ? TP.STATUS_FLOW_KELUHAN : TP.STATUS_FLOW;
-  let activeServiceFilter = "semua";
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-  function db() { return TP.DB.get(); }
-  function save(database) { TP.DB.set(database); render(); }
-  function changeStatus(id, status) {
-    const database = db(); const ticket = database.tickets.find((item) => item.id === id);
-    if (!ticket || ticket.status === status) return;
-    ticket.status = status;
-    ticket.timeline = Array.isArray(ticket.timeline) ? ticket.timeline : [];
-    ticket.timeline.push({ date: TP.todays(), text: "Status diperbarui admin: " + status });
-    save(database); TP.toast("Status " + id + " diperbarui.", "success");
-  }
-  function setFee(id) {
-    const input = document.querySelector('[data-fee="' + id + '"]'); const amount = Number(input && input.value);
-    if (!amount || amount < 1) { TP.toast("Masukkan nominal biaya yang valid.", "error"); return; }
-    const database = db(); const ticket = database.tickets.find((item) => item.id === id);
-    if (!ticket) return;
-    ticket.biaya = { nominal: amount, catatan: "Biaya ditetapkan admin (dummy)" };
-    ticket.timeline = Array.isArray(ticket.timeline) ? ticket.timeline : [];
-    ticket.timeline.push({ date: TP.todays(), text: "Biaya ditetapkan admin: " + TP.fmtRupiah(amount) });
-    save(database); TP.toast("Biaya layanan disimpan.", "success");
-  }
-  function show(section) {
-    document.querySelectorAll(".admin-section").forEach((el) => el.classList.toggle("active", el.id === "admin-" + section));
-    document.querySelectorAll("#admin-nav button").forEach((el) => el.classList.toggle("active", el.dataset.section === section));
-    if (section === "tickets") renderTickets();
-  }
-  function renderOverview(database) {
-    const tickets = database.tickets; const active = tickets.filter((t) => !["Selesai", "Ditolak", "Dibatalkan"].includes(t.status));
-    $("kpi-total").textContent = tickets.length; $("kpi-review").textContent = tickets.filter((t) => ["Baru", "Verifikasi", "Verifikasi Data"].includes(t.status)).length;
-    $("kpi-process").textContent = tickets.filter((t) => ["Survey Lapangan", "Penanganan", "Menunggu Pembayaran"].includes(t.status)).length; $("kpi-done").textContent = tickets.filter((t) => t.status === "Selesai").length;
-    $("today-label").textContent = TP.todays();
-    const urgent = active.sort((a, b) => ({"Sangat Tinggi":0,Tinggi:1,Normal:2,Rendah:3}[a.prioritas] ?? 4) - ({"Sangat Tinggi":0,Tinggi:1,Normal:2,Rendah:3}[b.prioritas] ?? 4)).slice(0, 5);
-    $("priority-list").innerHTML = urgent.length ? urgent.map((t) => `<button class="pay-row" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer" data-open="${esc(t.id)}"><div><b>${esc(t.id)}</b><div class="small muted">${esc(t.nmLayanan)} · ${esc(t.nama)}</div></div><span class="chip ${priorityClass(t.prioritas)}">${esc(t.prioritas)}</span></button>`).join("") : '<div class="admin-empty">Tidak ada tiket aktif.</div>';
-    const counts = {}; tickets.forEach((t) => { counts[t.status] = (counts[t.status] || 0) + 1; });
-    $("status-chart").innerHTML = Object.keys(counts).length ? Object.entries(counts).map(([status, count]) => `<div style="margin:11px 0"><div style="display:flex;justify-content:space-between;font-size:.86rem"><span>${esc(status)}</span><b>${count}</b></div><div class="progress"><div style="width:${Math.max(8, count / Math.max(tickets.length, 1) * 100)}%"></div></div></div>`).join("") : '<div class="admin-empty">Belum ada data.</div>';
-  }
-  function renderTickets() {
-    const database = db(); const search = $("ticket-search").value.toLowerCase(); const status = $("ticket-status").value; const type = $("ticket-type").value;
-    const rows = database.tickets.filter((t) => (!search || [t.id,t.nama,t.nmLayanan,t.noPelanggan].join(" ").toLowerCase().includes(search)) && (status === "semua" || t.status === status) && (type === "semua" || t.type === type) && (activeServiceFilter === "semua" || t.idLayanan === activeServiceFilter));
-    $("ticket-table-body").innerHTML = rows.length ? rows.map((t) => `<tr><td><span class="admin-ticket-id">${esc(t.id)}</span><small class="muted">${esc(t.type === "jasa" ? "Jasa" : "Keluhan")}</small></td><td><span class="admin-ticket-name">${esc(t.nama)}</span><small>${esc(t.noPelanggan || "Tanpa no. pelanggan")}</small></td><td>${esc(t.nmLayanan)}</td><td><span class="chip ${priorityClass(t.prioritas)}">${esc(t.prioritas)}</span></td><td><select class="select" style="min-width:145px;padding:7px 9px" data-status="${esc(t.id)}">${[...new Set([...flow(t), "Ditolak", "Dibatalkan"])].map((item) => `<option value="${esc(item)}" ${item === t.status ? "selected" : ""}>${esc(item)}</option>`).join("")}</select></td><td class="small">${esc(t.created)}</td><td><div class="admin-actions"><button class="btn small" data-open="${esc(t.id)}">Detail</button>${t.type === "jasa" && !["Selesai","Dibatalkan","Ditolak"].includes(t.status) ? `<input class="input" data-fee="${esc(t.id)}" type="number" min="0" placeholder="Biaya" value="${t.biaya && t.biaya.nominal ? t.biaya.nominal : ""}" style="width:105px;padding:7px 9px"><button class="btn teal small" data-save-fee="${esc(t.id)}">Rp</button>` : ""}</div></td></tr>`).join("") : '<tr><td colspan="7" class="admin-empty">Tidak ada tiket yang cocok dengan filter.</td></tr>';
-  }
-  function renderServices(database) {
-    const counts = {}; const active = {}; database.tickets.forEach((t) => { counts[t.idLayanan] = (counts[t.idLayanan] || 0) + 1; if (!["Selesai","Ditolak","Dibatalkan"].includes(t.status)) active[t.idLayanan] = (active[t.idLayanan] || 0) + 1; });
-    $("service-list").innerHTML = TP.SERVICE_CATALOG.map((service) => `<div class="service-admin-row"><div><strong>${esc(service.nama)}</strong><small>${esc(service.formSchema ? "Layanan jasa" : "Keluhan pelanggan")}</small></div><button class="btn ghost small" data-service-filter="${esc(service.id)}">${active[service.id] || 0} aktif</button><span class="chip blue">${counts[service.id] || 0} total</span></div>`).join("");
-  }
-  function renderActivity(database) {
-    const events = []; database.tickets.forEach((t) => (t.timeline || []).forEach((item) => events.push({ ...item, id: t.id }))); events.sort((a,b) => String(b.date).localeCompare(String(a.date))).splice(12);
-    $("activity-list").innerHTML = events.length ? events.map((item) => `<li><time>${esc(item.date)}</time><div><b>${esc(item.id)}</b><div class="small muted">${esc(item.text)}</div></div></li>`).join("") : '<li class="admin-empty">Belum ada aktivitas.</li>';
-  }
-  function render() { const database = db(); renderOverview(database); renderTickets(); renderServices(database); renderActivity(database); }
+  const END = ["Selesai", "Ditolak", "Dibatalkan"];
+  const PRIO_RANK = { "Sangat Tinggi": 0, Tinggi: 1, Normal: 2, Rendah: 3 };
+  const GROUPS = [
+    { key: "menunggu",  label: "Menunggu verifikasi", color: "#1666c4", statuses: ["Baru", "Verifikasi", "Verifikasi Data"] },
+    { key: "proses",    label: "Dalam proses",        color: "#f5a623", statuses: ["Survey Lapangan", "Penanganan", "Menunggu Pembayaran"] },
+    { key: "selesai",   label: "Selesai",             color: "#0aa8a0", statuses: ["Selesai"] },
+    { key: "tutup",     label: "Ditolak / batal",     color: "#e5403c", statuses: ["Ditolak", "Dibatalkan"] }
+  ];
+  const PAGE_SIZE = 6;
+  const SVC_COLORS = { jasa: "#0aa8a0", keluhan: "#1666c4" };
 
-  document.querySelectorAll("#admin-nav button").forEach((button) => button.addEventListener("click", () => show(button.dataset.section)));
-  document.querySelectorAll("[data-go]").forEach((button) => button.addEventListener("click", () => show(button.dataset.go)));
-  ["ticket-search", "ticket-status", "ticket-type"].forEach((id) => $(id).addEventListener("input", renderTickets));
-  $("ticket-table-body").addEventListener("change", (event) => { if (event.target.dataset.status) changeStatus(event.target.dataset.status, event.target.value); });
-  document.addEventListener("click", (event) => {
-    const open = event.target.closest("[data-open]"); if (open) TP.openTicketModal(open.dataset.open);
-    const saveFeeButton = event.target.closest("[data-save-fee]"); if (saveFeeButton) setFee(saveFeeButton.dataset.saveFee);
-    const service = event.target.closest("[data-service-filter]"); if (service) { activeServiceFilter = service.dataset.serviceFilter; show("tickets"); $("ticket-search").value = ""; $("ticket-status").value = "semua"; $("ticket-type").value = "semua"; renderTickets(); }
+  const ui = {
+    sec: "ringkasan",
+    q: "", status: "semua", type: "semua", prio: "semua", group: "semua", svc: "semua",
+    page: 1, act: "semua", bars: "m3"
+  };
+
+  const db = () => TP.DB.get();
+  const flowOf = (t) => (t.type === "keluhan" ? TP.STATUS_FLOW_KELUHAN : TP.STATUS_FLOW);
+  const sChip = (s) => (TP.STATUS_META[s] || { chip: "gray" }).chip;
+  const pChip = (p) => (TP.PRIORITY_META[p] || { chip: "gray" }).chip;
+  const isEnd = (t) => END.includes(t.status);
+
+  function commit(d, msg, type) {
+    TP.DB.set(d);
+    render();
+    if (msg) TP.toast(msg, type || "success");
+  }
+  function push(d, text, ico) {
+    d.notifications.unshift({ id: Date.now() + Math.random(), ico: ico || "♨", text: text, time: "Baru saja", unread: true });
+    d.notifications = d.notifications.slice(0, 30);
+  }
+
+  /* ================= NAVIGASI ================= */
+  function show(sec) {
+    ui.sec = sec;
+    document.querySelectorAll(".adm-sec").forEach((el) => el.classList.toggle("active", el.id === "sec-" + sec));
+    document.querySelectorAll("#adm-nav button").forEach((el) => el.classList.toggle("active", el.dataset.sec === sec));
+    if (history.replaceState) history.replaceState(null, "", "#" + sec);
+    closeDrawer();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  document.querySelectorAll("#adm-nav button").forEach((b) => b.addEventListener("click", () => show(b.dataset.sec)));
+  document.addEventListener("click", (e) => {
+    const go = e.target.closest("[data-goto]");
+    if (go) { show(go.dataset.goto); return; }
+    const kpi = e.target.closest("[data-kpi]");
+    if (kpi) {
+      const map = kpi.dataset.kpi;
+      resetFilters(true);
+      if (map === "fee") { show("tagihan"); return; }
+      if (GROUPS.some((g) => g.key === map)) ui.group = map;
+      ui.page = 1;
+      show("tiket");
+      renderTickets();
+      return;
+    }
   });
-  $("ticket-status").innerHTML += [...new Set(Object.keys(TP.STATUS_META))].map((status) => `<option value="${esc(status)}">${esc(status)}</option>`).join("");
-  $("reset-demo").addEventListener("click", () => { if (!confirm("Reset seluruh data tiket dummy?")) return; localStorage.removeItem(TP.LS_KEY); TP.ensureSpace(); render(); TP.toast("Data dummy dikembalikan.", "success"); });
+
+  /* ================= DRAWER (mobile) ================= */
+  const side = $("adm-side"), backdrop = $("side-backdrop");
+  function closeDrawer() { side.classList.remove("open"); backdrop.classList.remove("show"); }
+  $("adm-burger").addEventListener("click", () => { side.classList.toggle("open"); backdrop.classList.toggle("show"); });
+  backdrop.addEventListener("click", closeDrawer);
+
+  /* ================= TEMA ================= */
+  function applyTheme(mode) {
+    document.body.classList.toggle("dark", mode === "dark");
+    $("set-theme").value = mode;
+    try { localStorage.setItem("tirtapakuan_admin_theme", mode); } catch (e) {}
+  }
+  $("theme-btn").addEventListener("click", () => applyTheme(document.body.classList.contains("dark") ? "light" : "dark"));
+  $("set-theme").addEventListener("change", (e) => applyTheme(e.target.value));
+  let savedTheme = "light";
+  try { savedTheme = localStorage.getItem("tirtapakuan_admin_theme") || "light"; } catch (e) {}
+  applyTheme(savedTheme);
+
+  /* ================= NOTIFIKASI (lonceng) ================= */
+  function renderBell() {
+    const d = db();
+    const unread = (d.notifications || []).filter((n) => n.unread).length;
+    const badge = $("bell-count");
+    badge.textContent = unread > 9 ? "9+" : String(unread);
+    badge.hidden = unread === 0;
+    $("bell-list").innerHTML = (d.notifications || []).length
+      ? d.notifications.slice(0, 12).map((n) =>
+          `<li class="${n.unread ? "unread" : ""}"><span class="ico">${esc(n.ico || "♨")}</span><div><div>${esc(n.text)}</div><time>${esc(n.time)}</time></div></li>`
+        ).join("")
+      : '<li style="justify-content:center;color:var(--adm-muted)">Belum ada notifikasi.</li>';
+    const nb = $("nb-aktivitas");
+    if (nb) { nb.textContent = unread; nb.style.display = unread ? "" : "none"; }
+  }
+  $("bell-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const pop = $("bell-pop");
+    const open = pop.classList.toggle("open");
+    $("bell-btn").setAttribute("aria-expanded", String(open));
+  });
+  document.addEventListener("click", (e) => {
+    const pop = $("bell-pop");
+    if (pop.classList.contains("open") && !e.target.closest(".adm-bell-wrap")) pop.classList.remove("open");
+  });
+  $("bell-read").addEventListener("click", () => {
+    const d = db(); d.notifications.forEach((n) => (n.unread = false)); commit(d, "Semua notifikasi ditandai dibaca.");
+  });
+  $("bell-clear").addEventListener("click", () => commit(withNotifCleared(), "Notifikasi dibersihkan."));
+  function withNotifCleared() { const d = db(); d.notifications = []; return d; }
+
+  /* ================= RINGKASAN ================= */
+  function renderOverview() {
+    const d = db();
+    const tickets = d.tickets;
+    const review = tickets.filter((t) => ["Baru", "Verifikasi", "Verifikasi Data"].includes(t.status)).length;
+    const process = tickets.filter((t) => ["Survey Lapangan", "Penanganan", "Menunggu Pembayaran"].includes(t.status)).length;
+    const running = tickets.filter((t) => !isEnd(t)).length;
+    const fee = tickets.reduce((sum, t) => sum + (t.biaya && t.biaya.nominal ? Number(t.biaya.nominal) : 0), 0);
+
+    $("kpi-total").textContent = tickets.length;
+    $("kpi-review").textContent = review;
+    $("kpi-process").textContent = process;
+    $("kpi-fee").textContent = TP.fmtRupiah(fee);
+    $("kpi-fee-sub").textContent = tickets.filter((t) => t.type === "jasa").length + " tiket jasa · " +
+      tickets.filter((t) => t.type === "jasa" && !(t.biaya && t.biaya.nominal) && !isEnd(t)).length + " belum ada biaya";
+
+    const unpaid = TP.WATER_USAGE.filter((u) => u.bayar === false).reduce((s, u) => s + u.tagihan, 0);
+    $("hero-unpaid").textContent = TP.fmtRupiah(unpaid);
+    $("hero-running").textContent = running;
+    $("hero-svc").textContent = TP.SERVICE_CATALOG.length;
+    $("hero-date").textContent = new Date().toLocaleDateString("id-ID", { weekday: "long", day: "2-digit", month: "long", year: "numeric" });
+
+    /* donut */
+    const total = tickets.length;
+    const counts = GROUPS.map((g) => ({ ...g, count: tickets.filter((t) => g.statuses.includes(t.status)).length }));
+    let acc = 0; const parts = [];
+    counts.forEach((g) => { if (!g.count || !total) return; const from = acc; acc += (g.count / total) * 100; parts.push(`${g.color} ${from}% ${acc}%`); });
+    $("donut").style.background = total && parts.length ? `conic-gradient(${parts.join(",")})` : "conic-gradient(var(--gray-200) 0 100%)";
+    $("donut-total").textContent = total;
+    $("donut-legend").innerHTML = counts.map((g) =>
+      `<button class="legend-row${ui.group === g.key ? " on" : ""}" data-group="${g.key}"><span class="dot" style="background:${g.color}"></span><span class="lbl">${g.label}</span><b>${g.count}</b></button>`
+    ).join("");
+
+    /* prioritas */
+    const urgent = tickets.filter((t) => !isEnd(t))
+      .sort((a, b) => (PRIO_RANK[a.prioritas] ?? 9) - (PRIO_RANK[b.prioritas] ?? 9)).slice(0, 5);
+    $("prio-list").innerHTML = urgent.length ? urgent.map((t) =>
+      `<button class="prio-item" data-open="${esc(t.id)}">
+        <span class="p-ico">${t.type === "jasa" ? "▤" : "☏"}</span>
+        <span class="p-body"><b>${esc(t.id)} · ${esc(t.nmLayanan)}</b><span>${esc(t.nama)} · ${esc(t.zona || "—")} · ${esc(t.status)}</span></span>
+        <span class="chip ${pChip(t.prioritas)}">${esc(t.prioritas)}</span>
+      </button>`).join("")
+      : '<div class="adm-empty">Tidak ada tiket aktif. 🎉</div>';
+
+    renderBars($("usage-bars"), ui.bars);
+    renderFeed($("recent-feed"), buildEvents(d).slice(0, 5));
+
+    $("nb-tiket").textContent = running;
+    $("nb-layanan").textContent = TP.SERVICE_CATALOG.length;
+    $("nb-tagihan").textContent = TP.WATER_USAGE.filter((u) => u.bayar === false).length;
+  }
+
+  document.querySelectorAll("[data-bars]").forEach((b) => b.addEventListener("click", () => {
+    ui.bars = b.dataset.bars;
+    document.querySelectorAll("[data-bars]").forEach((x) => x.classList.toggle("on", x === b));
+    renderBars($("usage-bars"), ui.bars);
+  }));
+  document.querySelectorAll("[data-act]").forEach((b) => b.addEventListener("click", () => {
+    ui.act = b.dataset.act;
+    document.querySelectorAll("[data-act]").forEach((x) => x.classList.toggle("on", x === b));
+    renderActivity();
+  }));
+
+  function renderBars(wrap, mode) {
+    const data = TP.WATER_USAGE;
+    const values = data.map((u) => (mode === "m3" ? u.m3 : u.tagihan));
+    const max = Math.max(...values, 1);
+    wrap.innerHTML = data.map((u, i) => {
+      const v = values[i];
+      const pct = Math.max(6, Math.round((v / max) * 100));
+      const label = mode === "m3" ? v + " m³" : TP.fmtRupiah(v);
+      const unpaid = u.bayar === false;
+      return `<div class="bar${unpaid && mode !== "m3" ? " unpaid" : ""}" style="height:${pct}%" data-month="${esc(u.bulan)}" title="${esc(u.bulan)} — ${label}${unpaid ? " (belum bayar)" : ""}">
+        <i>${label}</i><em>${esc(u.bulan)}${unpaid ? " •" : ""}</em></div>`;
+    }).join("");
+  }
+
+  /* ================= SUMBER EVENT (tiket + notifikasi) ================= */
+  function parseDate(s) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(s || "").trim());
+    if (m) return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1])).getTime();
+    return 0;
+  }
+  function buildEvents(d) {
+    const out = [];
+    (d.notifications || []).forEach((n, i) => out.push({ kind: "notifikasi", ts: Date.now() - i, ico: n.ico || "♨", title: "Notifikasi", text: n.text, time: n.time, id: "" }));
+    d.tickets.forEach((t) => (t.timeline || []).forEach((x) => out.push({
+      kind: "tiket", ts: parseDate(x.date), ico: t.type === "jasa" ? "▤" : "☏",
+      title: t.id + " · " + t.nmLayanan, text: x.text, time: x.date, id: t.id
+    })));
+    return out.sort((a, b) => b.ts - a.ts);
+  }
+  function renderFeed(wrap, events) {
+    wrap.innerHTML = events.length ? events.map((e) =>
+      `<div class="feed-item">
+        <span class="f-ico">${esc(e.ico)}</span>
+        <div class="f-body">
+          <b>${esc(e.title)}</b> <time>· ${esc(e.time)}</time>
+          <p>${esc(e.text)}</p>
+          ${e.id ? `<button class="f-open" data-open="${esc(e.id)}">Buka tiket →</button>` : ""}
+        </div>
+      </div>`).join("")
+      : '<div class="adm-empty">Belum ada aktivitas.</div>';
+  }
+
+  /* ================= TIKET ================= */
+  function filteredTickets() {
+    const d = db();
+    const q = ui.q.trim().toLowerCase();
+    const groupStatuses = ui.group === "semua" ? null : (GROUPS.find((g) => g.key === ui.group) || {}).statuses;
+    const svc = ui.svc === "semua" ? null : ui.svc;
+    const rows = d.tickets.filter((t) => {
+      if (q && ![t.id, t.nama, t.nmLayanan, t.zona, t.noPelanggan, t.alamat].join(" ").toLowerCase().includes(q)) return false;
+      if (ui.status !== "semua" && t.status !== ui.status) return false;
+      if (ui.type !== "semua" && t.type !== ui.type) return false;
+      if (ui.prio !== "semua" && t.prioritas !== ui.prio) return false;
+      if (groupStatuses && !groupStatuses.includes(t.status)) return false;
+      if (svc && t.idLayanan !== svc) return false;
+      return true;
+    });
+    return rows.sort((a, b) => {
+      const ae = isEnd(a) ? 1 : 0, be = isEnd(b) ? 1 : 0;
+      if (ae !== be) return ae - be;
+      return (PRIO_RANK[a.prioritas] ?? 9) - (PRIO_RANK[b.prioritas] ?? 9);
+    });
+  }
+
+  function renderTickets() {
+    const rows = filteredTickets();
+    const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    if (ui.page > pages) ui.page = pages;
+    const slice = rows.slice((ui.page - 1) * PAGE_SIZE, ui.page * PAGE_SIZE);
+
+    $("t-body").innerHTML = slice.length ? slice.map((t) => {
+      const flow = flowOf(t);
+      const opts = [...new Set([...flow, "Ditolak", "Dibatalkan"])];
+      const canFee = t.type === "jasa" && !isEnd(t);
+      return `<tr>
+        <td><span class="adm-tid">${esc(t.id)}</span><small>${t.type === "jasa" ? "Jasa" : "Keluhan"} · ${esc(t.created)}</small></td>
+        <td><b>${esc(t.nama)}</b><small>${esc(t.noPelanggan || "tanpa no. pelanggan")}</small></td>
+        <td>${esc(t.nmLayanan)}<small>${esc(t.zona || "—")}</small></td>
+        <td><span class="chip ${pChip(t.prioritas)}">${esc(t.prioritas)}</span></td>
+        <td>
+          <select class="select" data-status="${esc(t.id)}" aria-label="Status tiket ${esc(t.id)}">
+            ${opts.map((o) => `<option value="${esc(o)}" ${o === t.status ? "selected" : ""}>${esc(o)}</option>`).join("")}
+          </select>
+          <small>${isEnd(t) ? "tuntas" : "tahap " + (Math.max(flow.indexOf(t.status), 0) + 1) + " dari " + flow.length}</small>
+        </td>
+        <td>
+          ${canFee ? `<div class="fee-cell">
+              <input class="input" type="number" min="0" data-fee="${esc(t.id)}" placeholder="Biaya" value="${t.biaya && t.biaya.nominal ? t.biaya.nominal : ""}">
+              <button class="btn teal" data-fee-save="${esc(t.id)}" title="Simpan biaya">Rp</button>
+            </div>` : `<b>${t.biaya && t.biaya.nominal ? TP.fmtRupiah(t.biaya.nominal) : "—"}</b><small>${t.type === "jasa" ? "belum ditetapkan" : "tanpa biaya"}</small>`}
+        </td>
+        <td>
+          <div class="row-actions" style="justify-content:flex-end">
+            <button class="btn ghost" data-open="${esc(t.id)}">Detail</button>
+            <button class="btn" data-adv="${esc(t.id)}" ${isEnd(t) ? "disabled" : ""} title="Proses satu tahap">▶ Proses</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join("") : '<tr><td colspan="7" class="adm-empty">Tidak ada tiket yang cocok dengan filter. Coba ubah kata kunci atau reset filter.</td></tr>';
+
+    const from = rows.length ? (ui.page - 1) * PAGE_SIZE + 1 : 0;
+    const to = Math.min(ui.page * PAGE_SIZE, rows.length);
+    $("t-count").textContent = `Menampilkan ${from}–${to} dari ${rows.length} tiket` +
+      (rows.length !== db().tickets.length ? ` (total ${db().tickets.length})` : "");
+
+    let pager = `<button ${ui.page === 1 ? "disabled" : ""} data-page="${ui.page - 1}">←</button>`;
+    for (let p = 1; p <= pages; p++) pager += `<button class="${p === ui.page ? "on" : ""}" data-page="${p}">${p}</button>`;
+    pager += `<button ${ui.page === pages ? "disabled" : ""} data-page="${ui.page + 1}">→</button>`;
+    $("t-pager").innerHTML = pages > 1 ? pager : "";
+
+    const gChip = $("chip-group");
+    if (ui.group !== "semua") {
+      const g = GROUPS.find((x) => x.key === ui.group);
+      gChip.textContent = "Status: " + (g ? g.label : ui.group) + " ✕";
+      gChip.classList.add("show");
+    } else gChip.classList.remove("show");
+
+    const sChipEl = $("chip-svc");
+    if (ui.svc !== "semua") {
+      const s = TP.svc(ui.svc);
+      sChipEl.textContent = "Layanan: " + (s ? s.nama : ui.svc) + " ✕";
+      sChipEl.classList.add("show");
+    } else sChipEl.classList.remove("show");
+  }
+
+  function changeStatus(id, status) {
+    const d = db();
+    const t = d.tickets.find((x) => x.id === id);
+    if (!t || t.status === status) return;
+    t.status = status;
+    if (!Array.isArray(t.timeline)) t.timeline = [];
+    t.timeline.push({ date: TP.todays(), text: "Status diperbarui admin: " + status });
+    push(d, "Tiket " + id + " diperbarui menjadi: " + status, "☏");
+    commit(d, "Status " + id + " → " + status);
+  }
+
+  function advance(id) {
+    const d = db();
+    const t = d.tickets.find((x) => x.id === id);
+    if (!t) return;
+    const flow = flowOf(t);
+    const nxt = flow[flow.indexOf(t.status) + 1];
+    if (!nxt) { TP.toast("Tiket sudah berada di tahap akhir.", "error"); return; }
+    if (nxt === "Menunggu Pembayaran" && !(t.biaya && t.biaya.nominal)) {
+      TP.toast("Tetapkan nominal biaya terlebih dahulu.", "error");
+      const fee = document.querySelector('[data-fee="' + id + '"]');
+      if (fee) { fee.focus(); fee.style.borderColor = "var(--danger)"; setTimeout(() => (fee.style.borderColor = ""), 1400); }
+      return;
+    }
+    t.status = nxt;
+    if (!Array.isArray(t.timeline)) t.timeline = [];
+    t.timeline.push({ date: TP.todays(), text: "Status diperbarui admin: " + nxt });
+    push(d, "Tiket " + id + " sekarang berstatus: " + nxt, "☏");
+    commit(d, "Tiket " + id + " → " + nxt);
+  }
+
+  function saveFee(id) {
+    const input = document.querySelector('[data-fee="' + id + '"]');
+    const amount = Number(input && input.value);
+    if (!amount || amount < 1) { TP.toast("Masukkan nominal biaya yang valid.", "error"); return; }
+    const d = db();
+    const t = d.tickets.find((x) => x.id === id);
+    if (!t) return;
+    t.biaya = { nominal: amount, catatan: "Biaya ditetapkan admin (dummy)" };
+    if (!Array.isArray(t.timeline)) t.timeline = [];
+    t.timeline.push({ date: TP.todays(), text: "Biaya ditetapkan admin: " + TP.fmtRupiah(amount) });
+    push(d, "Biaya tiket " + id + " ditetapkan: " + TP.fmtRupiah(amount), "▧");
+    commit(d, "Biaya layanan disimpan.");
+  }
+
+  function resetFilters() {
+    ui.q = ""; ui.status = "semua"; ui.type = "semua"; ui.prio = "semua"; ui.group = "semua"; ui.svc = "semua"; ui.page = 1;
+    $("t-search").value = ""; $("t-status").value = "semua"; $("t-type").value = "semua"; $("t-prio").value = "semua";
+  }
+
+  $("t-search").addEventListener("input", (e) => { ui.q = e.target.value; ui.page = 1; renderTickets(); });
+  $("t-status").addEventListener("change", (e) => { ui.status = e.target.value; ui.page = 1; renderTickets(); });
+  $("t-type").addEventListener("change", (e) => { ui.type = e.target.value; ui.page = 1; renderTickets(); });
+  $("t-prio").addEventListener("change", (e) => { ui.prio = e.target.value; ui.page = 1; renderTickets(); });
+  $("t-body").addEventListener("change", (e) => { if (e.target.dataset.status) changeStatus(e.target.dataset.status, e.target.value); });
+  $("t-reset-filter").addEventListener("click", () => { resetFilters(); renderTickets(); TP.toast("Filter direset."); });
+  $("chip-group").addEventListener("click", () => { ui.group = "semua"; ui.page = 1; renderTickets(); });
+  $("chip-svc").addEventListener("click", () => { ui.svc = "semua"; ui.page = 1; renderTickets(); });
+  $("t-pager").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-page]");
+    if (!b || b.disabled) return;
+    ui.page = Number(b.dataset.page);
+    renderTickets();
+    document.getElementById("sec-tiket").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* export CSV */
+  $("t-export").addEventListener("click", () => {
+    const rows = filteredTickets();
+    if (!rows.length) { TP.toast("Tidak ada data untuk diexport.", "error"); return; }
+    const head = ["ID", "Jenis", "Pemohon", "No Pelanggan", "Zona", "Layanan", "Prioritas", "Status", "Biaya", "Dibuat"];
+    const csv = [head.join(";")].concat(rows.map((t) => [
+      t.id, t.type === "jasa" ? "Jasa" : "Keluhan", t.nama, t.noPelanggan || "-", t.zona || "-", t.nmLayanan,
+      t.prioritas, t.status, t.biaya && t.biaya.nominal ? t.biaya.nominal : 0, t.created
+    ].map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(";"))).join("\n");
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "tiket-tirta-pakuan.csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    TP.toast(rows.length + " tiket diexport (CSV).", "success");
+  });
+
+  /* ================= TIKET DUMMY ================= */
+  const NAMES = ["Siti Aminah", "Rudi Hartono", "Dewi Lestari", "Agus Setiawan", "Nurul Hidayah", "Fajar Nugroho", "Maya Sari", "Bayu Prakoso"];
+  const ZONES = ["Zona 1 – Tanah Sareal", "Zona 2 – Bogor Timur", "Zona 3 – Baranangsiang", "Zona 4 – Bogor Utara"];
+  const KELUHAN_TEXT = [
+    "Air di kran dapur mati total sejak pagi.",
+    "Debit air mengecil pada jam sibuk sore hari.",
+    "Ada kebocoran pipa di depan rumah.",
+    "Air keruh dan berbau setelah hujan.",
+    "Meter berputar padahal kran tertutup.",
+    "Tagihan bulan ini dirasa tidak sesuai."
+  ];
+  const JASA_TEXT = [
+    "Mohon pemasangan sambungan baru untuk bangunan baru.",
+    "Meter sudah tidak akurat, mohon diuji ulang.",
+    "Titik meter perlu digeser karena renovasi pagar.",
+    "Rumah kosong 6 bulan, mohon tutup sambungan sementara.",
+    "Minta ubah golongan ke Niaga karena buka usaha.",
+    "Perlu surat keterangan bebas tunggakan untuk bank."
+  ];
+
+  function createDummyTicket() {
+    const d = db();
+    const isJasa = Math.random() > 0.5;
+    const svc = isJasa
+      ? TP.JASA_DETAILS[Math.floor(Math.random() * TP.JASA_DETAILS.length)]
+      : TP.KELUHAN_DETAILS[Math.floor(Math.random() * TP.KELUHAN_DETAILS.length)];
+    const nama = NAMES[Math.floor(Math.random() * NAMES.length)];
+    const zone = ZONES[Math.floor(Math.random() * ZONES.length)];
+    const prio = ["Sangat Tinggi", "Tinggi", "Normal", "Rendah"][Math.floor(Math.random() * 4)];
+    const id = TP.uid("TPK-2026");
+    const text = isJasa ? JASA_TEXT[Math.floor(Math.random() * JASA_TEXT.length)] : KELUHAN_TEXT[Math.floor(Math.random() * KELUHAN_TEXT.length)];
+    d.tickets.unshift({
+      id: id, type: isJasa ? "jasa" : "keluhan", idLayanan: svc.id, nmLayanan: svc.nama,
+      nama: nama, noHP: "0812 " + (1000 + Math.floor(Math.random() * 8999)) + " " + (1000 + Math.floor(Math.random() * 8999)),
+      alamat: "Jl. " + ["Pajajaran", "Rancamaya", "Kencana", "Eka Tengah", "Sherman"][Math.floor(Math.random() * 5)] + " No. " + (1 + Math.floor(Math.random() * 90)) + ", Kota Bogor",
+      zona: zone, noPelanggan: "3124" + (100000 + Math.floor(Math.random() * 899999)),
+      keluhan: isJasa ? "" : text, jasa: isJasa ? text : "", catatan: "",
+      prioritas: prio, jenisPelanggan: "RT-2", formData: {},
+      syaratCheck: { jenisPelanggan: "RT-2", syarat: [], kontrak: [] }, dokumen: [],
+      ringkasan: text, biaya: { nominal: null, catatan: "—" },
+      status: "Baru", created: TP.todays(),
+      timeline: [{ date: TP.todays(), text: "Tiket dibuat oleh pelanggan (dummy)" }], reaction: null
+    });
+    push(d, "Tiket baru " + id + " (" + svc.nama + ") masuk antrean.", "☏");
+    commit(d, "Tiket dummy " + id + " dibuat.", "success");
+    show("tiket");
+  }
+  ["t-new", "cta-new-ticket", "hero-new", "set-new"].forEach((id) => { const el = $(id); if (el) el.addEventListener("click", createDummyTicket); });
+
+  /* ================= LAYANAN ================= */
+  function renderServices() {
+    const d = db();
+    const count = (sid, activeOnly) => d.tickets.filter((t) => t.idLayanan === sid && (!activeOnly || !isEnd(t))).length;
+    const jasaCount = TP.JASA_DETAILS.length, kelCount = TP.KELUHAN_DETAILS.length;
+    const withTickets = TP.SERVICE_CATALOG.filter((s) => count(s.id) > 0).length;
+    const top = TP.SERVICE_CATALOG.slice().sort((a, b) => count(b.id) - count(a.id))[0];
+
+    $("svc-stats").innerHTML = `
+      <span class="chip blue">${TP.SERVICE_CATALOG.length} jenis layanan</span>
+      <span class="chip teal">${jasaCount} layanan jasa</span>
+      <span class="chip amber">${kelCount} kanal keluhan</span>
+      <span class="chip gray">${withTickets} punya tiket</span>
+      ${top && count(top.id) ? `<span class="chip danger">Teraktif: ${esc(top.nama)} (${count(top.id)})</span>` : ""}`;
+
+    $("svc-grid").innerHTML = TP.SERVICE_CATALOG.map((s) => {
+      const cat = s.formSchema ? "jasa" : "keluhan";
+      const total = count(s.id), active = count(s.id, true);
+      return `<article class="svc-card" style="--sc:${SVC_COLORS[cat]}">
+        <div class="svc-top">
+          <span class="svc-ico">${esc(s.icon || "▦")}</span>
+          <span class="chip ${cat === "jasa" ? "teal" : "blue"}">${cat === "jasa" ? "Layanan jasa" : "Keluhan"}</span>
+        </div>
+        <h3>${esc(s.nama)}</h3>
+        <p>${esc(s.deskripsi)}</p>
+        <div class="svc-meta">
+          <span><b>${total}</b>total tiket</span>
+          <span><b>${active}</b>sedang aktif</span>
+          <span><b>${Math.round((active / Math.max(total, 1)) * 100)}%</b>beban</span>
+        </div>
+        <div class="svc-actions">
+          <button class="btn ghost" data-svc-detail="${esc(s.id)}">Detail layanan</button>
+          <button class="btn" data-svc-queue="${esc(s.id)}">Antrean →</button>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  /* ================= PELANGGAN ================= */
+  function buildCustomers() {
+    const d = db();
+    const map = new Map();
+    const c = TP.DEFAULT_CUSTOMER;
+    map.set(c.noPelanggan, {
+      noPelanggan: c.noPelanggan, nama: c.nama, zona: c.zona, alamat: c.alamat,
+      status: c.status, tarif: c.tarif, tiket: 0, aktif: 0, seed: true
+    });
+    d.tickets.forEach((t) => {
+      const key = t.noPelanggan || t.nama;
+      if (!map.has(key)) {
+        map.set(key, {
+          noPelanggan: t.noPelanggan || "—", nama: t.nama, zona: t.zona || "—", alamat: t.alamat || "—",
+          status: "Aktif", tarif: "—", tiket: 0, aktif: 0, seed: false
+        });
+      }
+      const row = map.get(key);
+      row.tiket++;
+      if (!isEnd(t)) row.aktif++;
+      if (row.zona === "—" && t.zona) row.zona = t.zona;
+    });
+    return [...map.values()];
+  }
+
+  function renderCustomers() {
+    const list = buildCustomers();
+    $("c-total").textContent = list.length;
+    $("c-active").textContent = list.filter((x) => x.aktif > 0).length;
+    const avg = Math.round(TP.WATER_USAGE.reduce((s, u) => s + u.m3, 0) / TP.WATER_USAGE.length);
+    $("c-avg").textContent = avg + " m³";
+    $("c-tarif").textContent = TP.JENIS_PELANGGAN.length;
+
+    $("c-body").innerHTML = list.map((c) => `<tr>
+      <td><span class="adm-tid">${esc(c.noPelanggan)}</span><small>${esc(c.tarif === "—" ? "pemohon tiket" : c.tarif)}</small></td>
+      <td><b>${esc(c.nama)}</b><small>${esc(c.alamat)}</small></td>
+      <td>${esc(c.zona)}</td>
+      <td><span class="chip blue">${c.tiket} tiket</span>${c.aktif ? ` <span class="chip amber">${c.aktif} aktif</span>` : ""}</td>
+      <td><span class="chip ${c.status === "Aktif" ? "teal" : "gray"}">${esc(c.status)}</span></td>
+      <td><div class="row-actions" style="justify-content:flex-end">
+        <button class="btn ghost" data-cust-tickets="${esc(c.noPelanggan)}">Lihat tiket</button>
+        <button class="btn ghost" data-cust-bill="${esc(c.noPelanggan)}">Tagihan</button>
+      </div></td>
+    </tr>`).join("");
+
+    const seed = TP.DEFAULT_CUSTOMER;
+    $("pf-nama").textContent = seed.nama;
+    $("pf-nopel").textContent = "No. Pelanggan " + seed.noPelanggan;
+    $("pf-zona").textContent = seed.zona;
+    $("pf-tarif").textContent = seed.tarif;
+    $("pf-alamat").textContent = seed.alamat;
+    $("pf-status").textContent = seed.status;
+    $("pf-av").textContent = seed.nama.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+
+    if (!$("tarif-list").children.length) {
+      $("tarif-list").innerHTML = TP.JENIS_PELANGGAN.map((j) => `<div class="tarif-item">
+        <button class="tarif-head" data-tarif><span class="tid">${esc(j.id)}</span><span class="tn">${esc(j.nama)}</span><span class="caret">›</span></button>
+        <div class="tarif-body"><b>${esc(j.golongan)}</b> · ${esc(j.blok)}<br>${esc(j.deskripsi)}<br><b>Contoh:</b> ${esc(j.cth)}</div>
+      </div>`).join("");
+    }
+
+    renderBars($("usage-bars-2"), "m3");
+    $("usage-body").innerHTML = TP.WATER_USAGE.slice().reverse().map((u) => `<tr>
+      <td><b>${esc(u.bulan)} 2026</b></td>
+      <td>${u.m3} m³</td>
+      <td>${TP.fmtRupiah(u.tagihan)}</td>
+      <td><span class="chip ${u.bayar ? "teal" : "amber"}">${u.bayar ? "Lunas" : "Belum bayar"}</span></td>
+    </tr>`).join("");
+  }
+
+  /* ================= TAGIHAN ================= */
+  function renderBilling() {
+    const usage = TP.WATER_USAGE;
+    const unpaidRows = usage.filter((u) => u.bayar === false);
+    const unpaid = unpaidRows.reduce((s, u) => s + u.tagihan, 0);
+    const paid = usage.filter((u) => u.bayar).reduce((s, u) => s + u.tagihan, 0);
+    const avg = Math.round(usage.reduce((s, u) => s + u.tagihan, 0) / usage.length);
+
+    $("b-unpaid").textContent = TP.fmtRupiah(unpaid);
+    $("b-unpaid-sub").textContent = unpaidRows.length ? unpaidRows.map((u) => u.bulan).join(", ") + " 2026" : "Semua lunas 🎉";
+    $("b-paid").textContent = TP.fmtRupiah(paid);
+    $("b-avg").textContent = TP.fmtRupiah(avg);
+    $("b-due").textContent = "20 Okt 2026";
+
+    const tickets = db().tickets;
+    const fee = tickets.reduce((s, t) => s + (t.biaya && t.biaya.nominal ? Number(t.biaya.nominal) : 0), 0);
+    const noFee = tickets.filter((t) => t.type === "jasa" && !isEnd(t) && !(t.biaya && t.biaya.nominal)).length;
+    $("b-fee").textContent = TP.fmtRupiah(fee);
+    $("b-nofee").textContent = noFee + " tiket";
+
+    $("b-body").innerHTML = usage.slice().reverse().map((u) => `<tr>
+      <td><b>${esc(u.bulan)} 2026</b></td>
+      <td>${u.m3} m³</td>
+      <td class="right"><b>${TP.fmtRupiah(u.tagihan)}</b></td>
+      <td><span class="chip ${u.bayar ? "teal" : "amber"}">${u.bayar ? "Lunas" : "Belum bayar"}</span></td>
+      <td><div class="row-actions" style="justify-content:flex-end">
+        ${u.bayar
+          ? '<span class="muted small">tuntas</span>'
+          : `<button class="btn ghost" data-remind="${esc(u.bulan)}">✉ Ingatkan</button>
+             <button class="btn" data-pay="${esc(u.bulan)}">Bayar</button>`}
+      </div></td>
+    </tr>`).join("");
+  }
+
+  $("bill-remind-all").addEventListener("click", () => {
+    const rows = TP.WATER_USAGE.filter((u) => u.bayar === false);
+    if (!rows.length) { TP.toast("Semua tagihan sudah lunas. 🎉", "success"); return; }
+    const d = db();
+    push(d, "Pengingat pembayaran dikirim untuk periode: " + rows.map((u) => u.bulan).join(", ") + " 2026 (demo).", "▧");
+    commit(d, "Pengingat dikirim ke pelanggan (demo).");
+  });
+  $("pay-now").addEventListener("click", () => TP.toast("Menghubungkan ke kanal pembayaran Virtual Account… ✓ (demo)", "success"));
+  $("pay-instr").addEventListener("click", () => TP.toast("Instruksi pembayaran dikirim ke WhatsApp pelanggan (demo)."));
+
+  /* ================= AKTIVITAS ================= */
+  function renderActivity() {
+    const d = db();
+    let events = buildEvents(d);
+    if (ui.act !== "semua") events = events.filter((e) => e.kind === ui.act);
+    $("act-count").textContent = events.length + " entri · " +
+      ((d.notifications || []).filter((n) => n.unread).length) + " notifikasi belum dibaca";
+    renderFeed($("act-list"), events.slice(0, 30));
+  }
+  $("act-clear").addEventListener("click", () => commit(withNotifCleared(), "Notifikasi dibersihkan."));
+
+  /* ================= PENGATURAN ================= */
+  $("set-role").addEventListener("change", (e) => {
+    window.TP_CURRENT_ROLE = e.target.value;
+    TP.toast("Peran demo diubah ke: " + e.target.options[e.target.selectedIndex].text, "success");
+  });
+  $("set-reset").addEventListener("click", () => {
+    if (!confirm("Reset seluruh data tiket dummy? Perubahan lokal akan hilang.")) return;
+    try { localStorage.removeItem(TP.LS_KEY); } catch (e) {}
+    TP.ensureSpace();
+    resetFilters();
+    commit(db(), "Data dummy dikembalikan ke kondisi awal.");
+  });
+  $("set-clear-notif").addEventListener("click", () => commit(withNotifCleared(), "Notifikasi dibersihkan."));
+
+  function renderSettings() {
+    const d = db();
+    let size = "—";
+    try { size = (JSON.stringify(d).length / 1024).toFixed(1) + " KB"; } catch (e) {}
+    $("set-key").textContent = TP.LS_KEY;
+    $("set-size").textContent = size + " · " + d.tickets.length + " tiket · " + (d.notifications || []).length + " notifikasi";
+  }
+
+  /* ================= GLOBAL DELEGATION ================= */
+  document.addEventListener("click", (e) => {
+    const open = e.target.closest("[data-open]");
+    if (open) { TP.openTicketModal(open.dataset.open); return; }
+
+    const adv = e.target.closest("[data-adv]");
+    if (adv && !adv.disabled) { advance(adv.dataset.adv); return; }
+
+    const feeBtn = e.target.closest("[data-fee-save]");
+    if (feeBtn) { saveFee(feeBtn.dataset.feeSave); return; }
+
+    const group = e.target.closest("[data-group]");
+    if (group) {
+      ui.group = ui.group === group.dataset.group ? "semua" : group.dataset.group;
+      ui.page = 1;
+      show("tiket"); renderTickets(); renderOverview();
+      return;
+    }
+
+    const svcDetail = e.target.closest("[data-svc-detail]");
+    if (svcDetail) { TP.openServiceModal(svcDetail.dataset.svcDetail); return; }
+
+    const svcQueue = e.target.closest("[data-svc-queue]");
+    if (svcQueue) {
+      resetFilters(true); ui.svc = svcQueue.dataset.svcQueue; ui.page = 1;
+      show("tiket"); renderTickets();
+      TP.toast("Menampilkan antrean layanan terpilih.");
+      return;
+    }
+
+    const custTickets = e.target.closest("[data-cust-tickets]");
+    if (custTickets) {
+      resetFilters(true); ui.q = custTickets.dataset.custTickets; ui.page = 1;
+      $("t-search").value = ui.q;
+      show("tiket"); renderTickets();
+      return;
+    }
+
+    const custBill = e.target.closest("[data-cust-bill]");
+    if (custBill) { show("tagihan"); return; }
+
+    const tarif = e.target.closest("[data-tarif]");
+    if (tarif) { tarif.parentElement.classList.toggle("open"); return; }
+
+    const remind = e.target.closest("[data-remind]");
+    if (remind) {
+      const d = db();
+      push(d, "Pengingat pembayaran periode " + remind.dataset.remind + " 2026 dikirim (demo).", "▧");
+      commit(d, "Pengingat " + remind.dataset.remind + " 2026 dikirim.");
+      return;
+    }
+
+    const pay = e.target.closest("[data-pay]");
+    if (pay) {
+      const d = db();
+      const u = TP.WATER_USAGE.find((x) => x.bulan === pay.dataset.pay);
+      if (u) { u.bayar = true; TP.DB.set(d); push(d, "Pembayaran " + u.bulan + " 2026 sebesar " + TP.fmtRupiah(u.tagihan) + " diterima (demo).", "✓"); }
+      commit(db(), "Pembayaran " + pay.dataset.pay + " 2026 berhasil (demo).");
+      return;
+    }
+
+    const bar = e.target.closest(".bars .bar");
+    if (bar && bar.dataset.month) { show("pelanggan"); TP.toast("Periode " + bar.dataset.month + " — detail pemakaian air."); return; }
+  });
+
+  /* ================= PENCARIAN GLOBAL ================= */
+  $("global-search").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    resetFilters(true);
+    ui.q = e.target.value;
+    $("t-search").value = ui.q;
+    ui.page = 1;
+    show("tiket");
+    renderTickets();
+    if (ui.q) TP.toast('Mencari "' + ui.q + '" di antrean tiket.');
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && !/input|select|textarea/i.test(document.activeElement.tagName)) {
+      e.preventDefault(); $("global-search").focus();
+    }
+    if (e.key === "Escape") {
+      $("bell-pop").classList.remove("open");
+      closeDrawer();
+      if (typeof TP.closeTicketModal === "function") TP.closeTicketModal();
+      if (typeof TP.closeServiceModal === "function") TP.closeServiceModal();
+    }
+  });
+
+  /* ================= RENDER ROOT ================= */
+  function render() {
+    renderOverview();
+    renderTickets();
+    renderServices();
+    renderCustomers();
+    renderBilling();
+    renderActivity();
+    renderSettings();
+    renderBell();
+  }
+
+  /* init status options */
+  $("t-status").innerHTML = '<option value="semua">Semua status</option>' +
+    Object.keys(TP.STATUS_META).map((s) => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
+
+  $("hero-refresh").addEventListener("click", () => { render(); TP.toast("Data disegarkan dari database lokal.", "success"); });
+
+  /* section pertama dari hash */
+  const initial = (location.hash || "").replace("#", "");
+  if (["ringkasan", "tiket", "layanan", "pelanggan", "tagihan", "aktivitas", "pengaturan"].includes(initial)) show(initial);
+
   render();
 })();
 </script>
