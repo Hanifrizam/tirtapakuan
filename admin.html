@@ -66,6 +66,57 @@
   .admin-log time { flex:0 0 88px; color:var(--teal-600); font-size:.78rem; font-weight:700; }
   @media (max-width:920px) { .admin-layout { grid-template-columns:1fr; } .admin-side { position:static; } .admin-nav { display:flex; flex-wrap:wrap; } .admin-nav button { width:auto; flex:1; min-width:145px; } }
   @media (max-width:640px) { .admin-toolbar .input, .admin-toolbar .select { width:100%; } .admin-ticket-table { min-width:760px; } .service-admin-row { grid-template-columns:1fr 80px 80px; } }
+
+  /* Admin workspace polish */
+  .admin-shell { background:#f5f7fb; background-image:none; }
+  .admin-top { background:#102a4d; border-bottom:1px solid rgba(255,255,255,.12); box-shadow:0 2px 12px rgba(12,32,58,.18); }
+  .admin-top-inner { min-height:70px; padding:12px 0; }
+  .admin-top .brand { letter-spacing:.1px; }
+  .admin-top .brand-logo { width:36px; height:36px; box-shadow:none; background:#1a8f9a; }
+  .admin-top-meta { gap:8px; }
+  .admin-live { padding-right:8px; border-right:1px solid rgba(255,255,255,.18); }
+  .admin-live::before { width:7px; height:7px; box-shadow:none; }
+  .admin-layout { grid-template-columns:220px minmax(0, 1fr); gap:28px; max-width:1240px; padding-top:28px; }
+  .admin-side { top:92px; }
+  .admin-nav { border-radius:12px; background:#102a4d; padding:6px; box-shadow:0 6px 18px rgba(16,42,77,.12); }
+  .admin-nav button { min-height:45px; padding:10px 12px; font-size:.86rem; }
+  .admin-nav button.active { background:#1a8f9a; box-shadow:none; }
+  .admin-nav button:hover { transform:none; background:#1a3a60; }
+  .admin-nav .ico { width:22px; height:22px; font-size:.85rem; }
+  .admin-side > .card { margin-top:12px !important; padding:16px !important; border:1px solid #e2e8f0; box-shadow:0 5px 16px rgba(16,42,77,.06); }
+  .admin-side > .card::before { width:28px; height:2px; margin-bottom:11px; }
+  .admin-main, .admin-section > .card { box-shadow:0 5px 16px rgba(16,42,77,.055); }
+  .admin-section-head { margin-bottom:20px; }
+  .admin-section-head > div:first-child { padding-left:14px; }
+  .admin-section-head > div:first-child::before { width:3px; background:#1a8f9a; }
+  .admin-section-head h1 { font-size:1.65rem; letter-spacing:-.45px; }
+  .admin-section-head .eyebrow { color:#1a8f9a; font-size:.68rem; letter-spacing:1.6px; }
+  .admin-kpi { gap:12px; }
+  .admin-kpi .stat-card { min-height:124px; padding:17px 18px; border:1px solid #e1e8f0; border-top-width:3px; border-radius:12px; box-shadow:0 4px 12px rgba(16,42,77,.045); }
+  .admin-kpi .stat-card:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(16,42,77,.09); }
+  .admin-kpi .stat-card::after { width:64px; height:64px; right:-18px; bottom:-25px; }
+  .admin-kpi .label { font-size:.7rem; letter-spacing:.75px; }
+  .admin-kpi .value { font-size:1.75rem; }
+  .admin-kpi .delta { font-size:.74rem; }
+  .admin-alert { margin-bottom:16px; padding:11px 14px; font-size:.83rem; }
+  .admin-section .card { border-radius:12px; box-shadow:0 5px 16px rgba(16,42,77,.055); }
+  .admin-section .card-header { margin-bottom:11px; }
+  .admin-section .card-header h3 { font-size:.98rem; }
+  .admin-section .card-header .sub { font-size:.76rem; }
+  .admin-toolbar { padding:9px; background:#f7fafc; border-color:#e3eaf1; border-radius:9px; }
+  .admin-toolbar .input, .admin-toolbar .select { min-height:38px; padding:8px 11px; font-size:.86rem; }
+  .admin-ticket-table { font-size:.84rem !important; }
+  .admin-ticket-table th { padding:10px 11px; font-size:.68rem; letter-spacing:.4px; }
+  .admin-ticket-table td { padding:11px; }
+  .admin-ticket-table .select { font-size:.78rem; background:#fff; border-color:#d7e0e9; }
+  .admin-ticket-id { font-size:.82rem; }
+  .admin-actions .btn { font-size:.76rem; padding:6px 10px; }
+  .service-admin-row { padding:12px 4px; }
+  .service-admin-row strong { font-size:.88rem; }
+  .service-admin-row small { font-size:.75rem; }
+  .admin-log li { padding:12px 3px; }
+  @media (max-width:920px) { .admin-layout { grid-template-columns:1fr; } .admin-side { top:auto; } }
+  @media (max-width:640px) { .admin-top-meta { width:100%; margin-left:0; } .admin-live { display:none; } .admin-top-meta .btn { flex:1; } .admin-top-meta .chip { display:none; } .admin-layout { padding-top:18px; } }
 </style>
 </head>
 <body>
