@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pusat Layanan &amp; Tiket — Perumda Tirta Pakuan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230f3b77'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff'>☏</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-logo">♧</span>
+      <span>Perumda <b>Tirta Pakuan</b><small>Pusat Layanan &amp; Tiket</small></span>
+    </a>
+    <button class="menu-toggle" aria-label="Buka navigasi" aria-expanded="false">☰</button>
+    <nav class="nav-links" aria-label="Navigasi utama" id="mainNav">
+      <a href="index.html">⌂ Beranda</a>
+      <a href="layanan.html">Layanan</a>
+      <a href="index.html#informasi">Informasi</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a class="btn teal small" href="#layanan-tiket">＋ Buat Tiket Baru</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding:3rem 0 4.2rem">
+    <div class="container hero-content">
+      <span class="eyebrow" style="color:#7fd4ee">PUSAT LAYANAN TERPADU</span>
+      <h1 style="font-size:clamp(1.7rem,3.6vw,2.5rem)">Pusat Layanan Pelanggan<br>&amp; Sistem Tiket</h1>
+      <p>Ajukan permohonan jasa atau laporkan keluhan air Anda. Setiap tiket memiliki nomor unik, data permohonan, ringkasan kebutuhan, dan status yang dapat dipantau real-time.</p>
+      <div class="hero-actions">
+        <a class="btn white" href="#layanan-tiket">☏ Buat Tiket Baru</a>
+        <a class="btn ghost" href="dashboard.html?view=tiket" style="border-color:#fff;color:#fff">Lihat Progress Tiket</a>
+      </div>
+    </div>
+    <svg class="wave" viewBox="0 0 1920 140" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="#ffffff88" d="M0 70 Q470 -20 960 55 T1920 75 V140 H0Z"></path>
+      <path fill="#ffffffb3" d="M0 100 Q580 155 1110 82 T1920 70 V140 H0Z"></path>
+      <path fill="#f2f5f9" d="M0 84 Q520 170 1050 120 T1920 70 V140 H0Z"></path>
+    </svg>
+  </section>
+
+  <section id="daftar-tiket" style="padding-top:1.4rem">
+    <div class="container">
+      <div class="card" style="margin-bottom:22px">
+        <div class="card-header">
+          <div>
+            <h3>☏ Daftar &amp; Status Tiket Anda</h3>
+          <div class="sub">Pilih tiket untuk melihat detail status terbaru. Untuk memantau seluruh progress, buka Dashboard Pelanggan.</div>
+          </div>
+          <div class="seg" id="filterSeg">
+            <button data-filter="semua" class="active">Semua</button>
+            <button data-filter="jasa">Jasa</button>
+            <button data-filter="keluhan">Keluhan</button>
+          </div>
+        </div>
+        <div id="ticket-list"></div>
+        <div class="ticket-dashboard-cta">
+          <div><b>Ingin melihat progress tiket?</b><span>Pantau tahapan dan riwayat tiket Anda langsung dari dashboard.</span></div>
+          <a class="btn small" href="dashboard.html?view=tiket">Buka Dashboard →</a>
+        </div>
+      </div>
+
+      <div class="card" id="layanan-tiket">
+        <div class="card-header">
+          <div>
+            <h3>＋ Buat Tiket Baru</h3>
+            <div class="sub">Lengkapi 5 langkah: layanan, formulir, syarat &amp; kontrak, data tambahan, lalu kirim.</div>
+          </div>
+        </div>
+
+        <div class="login-ticket-gate hidden" id="login-ticket-gate">
+          <span class="gate-icon">🔐</span>
+          <div><h3>Masuk SSO untuk membuat tiket</h3><p>Silakan masuk menggunakan akun SSO Perumda terlebih dahulu. Setelah berhasil masuk, Anda akan diarahkan kembali ke formulir tiket ini.</p></div>
+          <a class="btn teal" id="sso-ticket-link" href="dashboard.html?next=ticketing.html%23layanan-tiket">Masuk dengan SSO →</a>
+        </div>
+
+        <div id="ticket-form-area">
+        <div class="stepper" id="stepper">
+          <div class="step active" data-step="1"><span class="n">1</span>Layanan<b>Jasa / Keluhan</b></div>
+          <div class="step" data-step="2"><span class="n">2</span>Form<b>Detail permintaan</b></div>
+          <div class="step" data-step="3"><span class="n">3</span>Syarat<b>Syarat &amp; kontrak</b></div>
+          <div class="step" data-step="4"><span class="n">4</span>Data<b>Data tambahan</b></div>
+          <div class="step" data-step="5"><span class="n">5</span>Kirim<b>Konfirmasi</b></div>
+        </div>
+
+        <div class="seg" id="typeSeg" style="margin-bottom:18px">
+          <button type="button" data-type="jasa" class="active">Layanan Jasa</button>
+          <button type="button" data-type="keluhan">Lapor Keluhan</button>
+        </div>
+
+        <form id="ticket-form" novalidate>
+          <!-- ======== LANGKAH 1 : JENIS & LAYANAN ======== -->
+          <div class="step-pane" data-pane="1">
+            <div class="field">
+              <label>Apa yang Anda butuhkan? <small id="type-hint">— pilih jenis jasa</small></label>
+              <select class="select" id="f-layanan" required></select>
+            </div>
+            <div class="alert alert--info hidden" id="layanan-desc"></div>
+            <div id="layanan-detail-row">
+              <button type="button" class="btn ghost small hidden" id="btnSvcDetail">⇲ Lihat Detail Layanan (Syarat, Kontrak, Jenis Pelanggan, Estimasi)</button>
+            </div>
+            <div class="form-grid-2" id="contact-grid">
+              <div class="field">
+                <label>Nama Lengkap</label>
+                <input class="input" id="f-nama" required placeholder="Nama lengkap pemohon">
+              </div>
+              <div class="field">
+                <label>No. WhatsApp</label>
+                <input class="input" id="f-nohp" required placeholder="08xx xxxx xxxx">
+              </div>
+              <div class="field">
+                <label>Alamat</label>
+                <input class="input" id="f-alamat" required placeholder="Alamat lengkap">
+              </div>
+              <div class="field">
+                <label>Zona / Wilayah</label>
+                <select class="select" id="f-zona">
+                  <option>Zona 1 – Tanah Sareal</option>
+                  <option>Zona 2 – Bogor Timur</option>
+                  <option selected>Zona 3 – Baranangsiang</option>
+                  <option>Zona 4 – Bogor Utara</option>
+                  <option>Luar Kota Bogor</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>No. Pelanggan</label>
+                <input class="input" id="f-nopel" placeholder="Contoh: 3124508221 (opsional)">
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+              <button type="button" class="btn" id="toStep2">Lanjut: Detail Permintaan →</button>
+            </div>
+          </div>
+
+          <!-- ======== LANGKAH 2 : FORM LAYANAN / KELUHAN ======== -->
+          <div class="step-pane hidden" data-pane="2">
+            <div id="svc-form"></div>
+            <div class="field hidden" id="complaint-image-wrap">
+              <label for="f-keluhan-images">Foto problem <small>(opsional, maksimal 3 foto)</small></label>
+              <input class="input" id="f-keluhan-images" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+              <small>Format JPG, PNG, atau WEBP. Maksimal 2 MB per foto.</small>
+              <div id="complaint-image-preview" class="image-preview-grid" aria-live="polite"></div>
+            </div>
+            <div class="field" id="f-catatan-wrap">
+              <label for="f-catatan">Catatan tambahan (opsional)</label>
+              <input class="input" id="f-catatan" placeholder="Mis. estimasi biaya, jadwal yang diinginkan, atau keterangan lain...">
+            </div>
+            <div class="field">
+              <label>Prioritas</label>
+              <select class="select" id="f-prioritas">
+                <option>Rendah</option>
+                <option selected>Normal</option>
+                <option>Tinggi</option>
+                <option>Sangat Tinggi</option>
+              </select>
+              <small>Prioritas tinggi untuk hal mendesak seperti tidak ada air sama sekali atau kebocoran besar.</small>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:space-between">
+              <button type="button" class="btn ghost" id="backStep1">← Kembali</button>
+              <button type="button" class="btn" id="toStep3">Lanjut: Syarat &amp; Kontrak →</button>
+            </div>
+          </div>
+
+          <!-- ======== LANGKAH 3 : SYARAT, KONTRAK, JENIS PELANGGAN ======== -->
+          <div class="step-pane hidden" data-pane="3">
+            <div id="syarat-area"></div>
+            <div style="display:flex;gap:10px;justify-content:space-between">
+              <button type="button" class="btn ghost" id="backStep2">← Kembali</button>
+              <button type="button" class="btn" id="toStep4">Lanjut: Data Tambahan &amp; Ringkasan →</button>
+            </div>
+          </div>
+
+          <!-- ======== LANGKAH 4 : DATA TAMBAHAN & RINGKASAN ======== -->
+          <div class="step-pane hidden" data-pane="4">
+            <div class="card tcard">
+              <div class="card-header"><h3>▧ Ringkasan Kebutuhan</h3></div>
+              <div class="sum-body" id="ringkasan-box"></div>
+            </div>
+            <div class="card tcard">
+              <div class="card-header"><div><h3>▦ Data Tambahan</h3><div class="sub">Isi data yang diperlukan sesuai layanan. Pada versi pengembangan ini, data tiket tersimpan di browser yang digunakan.</div></div></div>
+              <div class="form-grid-2" id="data-layanan-box"></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:space-between">
+              <button type="button" class="btn ghost" id="backStep3">← Kembali</button>
+              <button type="button" class="btn" id="toStep5">Lanjut: Konfirmasi →</button>
+            </div>
+          </div>
+
+          <!-- ======== LANGKAH 5 : KONFIRMASI & KIRIM ======== -->
+          <div class="step-pane hidden" data-pane="5">
+            <div class="alert alert--info" id="confirm-summary"></div>
+            <div class="field" id="finish-check-wrap">
+              <label><input type="checkbox" id="f-syarat" required> Saya menyatakan data yang diisi adalah benar, menyetujui seluruh syarat &amp; kontrak, dan mengizinkan data permohonan diproses oleh petugas.</label>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:space-between;align-items:center">
+              <button type="button" class="btn ghost" id="backStep4">← Kembali</button>
+              <button type="submit" class="btn teal" id="submitBtn">✓ Kirim Tiket</button>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-banner">
+        <div>
+          <h2>Lebih cepat? Akses dashboard pelanggan.</h2>
+          <p>Pantau tagihan, pemakaian air, dan tiket Anda dari satu tempat.</p>
+        </div>
+        <a class="btn white" href="dashboard.html">Buka Dashboard →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html"><span class="brand-logo">♧</span> <span>Perumda <b>Tirta Pakuan</b></span></a>
+        <p style="margin-top:10px">Melayani air bersih Kota Bogor — Handal dalam pekerjaan, prima dalam pelayanan.</p>
+      </div>
+      <div><h3>Layanan</h3><a href="#daftar-tiket">Status Tiket</a><a href="#layanan-tiket">Buat Tiket</a><a href="layanan.html">Daftar Layanan</a></div>
+      <div><h3>Akun</h3><a href="dashboard.html">Dashboard</a><a href="dashboard.html#sso">Masuk / SSO</a></div>
+      <div><h3>Website</h3><a href="index.html">Beranda</a><a href="index.html#berita">Berita</a><a href="index.html#kontak">Hubungi Kami</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Perumda Tirta Pakuan Kota Bogor — Sistem layanan pelanggan &amp; tiket (terpadu).</span>
+      <span>Jl. Raya Cibanteng No.1, Tanah Sareal, Kota Bogor</span>
+    </div>
+  </div>
+</footer>
+
+<div id="toast-wrap"></div>
+
+<script src="js/main.js"></script>
+<script>
+  (function () {
+    const TP = window.TP;
+    TP.ensureSpace();
+
+    let filter = "semua";
+    let type = "jasa";
+    let step = 1;
+    let complaintImages = [];
+
+    let selJenis = null;        // id jenis pelanggan
+    let syaratChecked = [];     // id poin syarat
+    let kontrakChecked = [];    // id poin kontrak
+    const el = (id) => document.getElementById(id);
+
+    /* ======== KATALOG OPTIONS ======== */
+    function renderLayananOptions() {
+      const opts = type === "jasa" ? TP.JASA_OPTIONS : TP.KELUHAN_OPTIONS;
+      const sel = el("f-layanan");
+      sel.innerHTML = "";
+      opts.forEach((o) => {
+        const opt = document.createElement("option");
+        opt.value = o.id;
+        opt.textContent = o.nama;
+        sel.appendChild(opt);
+      });
+      syncDesc();
+    }
+    function syncDesc() {
+      const s = TP.svc(el("f-layanan").value);
+      el("layanan-desc").textContent = s ? s.deskripsi : "";
+      el("layanan-desc").classList.toggle("hidden", !s);
+      el("type-hint").textContent = type === "jasa" ? "— pilih jenis jasa" : "— pilih jenis keluhan";
+      el("btnSvcDetail").classList.toggle("hidden", !s);
+    }
+    function currentSvc() {
+      return TP.svc(el("f-layanan").value);
+    }
+
+    /* ======== FORMULIR DINAMIS ======== */
+    function fieldHtml(f) {
+      const req = f.required ? " required" : "";
+      const pattern = f.pattern ? ` pattern="${f.pattern}"` : "";
+      const hint = f.hint ? `<span class="fhint">${f.hint}</span>` : "";
+      let input = "";
+      if (f.type === "textarea") {
+        input = `<textarea class="textarea" data-key="${f.key}"${req}${pattern} placeholder="${f.placeholder || ""}"></textarea>`;
+      } else if (f.type === "select") {
+        input = `<select class="select" data-key="${f.key}"${req}>` +
+          "<option value=''>— Pilih —</option>" +
+          (f.options || []).map((o) => `<option>${o}</option>`).join("") +
+          "</select>";
+      } else if (f.type === "date") {
+        input = `<input class="input" type="date" data-key="${f.key}"${req}${pattern}>`;
+      } else {
+        input = `<input class="input" type="${f.type === "number" ? "number" : "text"}" data-key="${f.key}"${req}${pattern} placeholder="${f.placeholder || ""}">`;
+      }
+      return `<div class="field"><label>${f.label}${f.required ? " *" : ""}</label>${input}${hint}</div>`;
+    }
+    function renderServiceForm() {
+      const s = currentSvc();
+      const wrap = el("svc-form");
+      if (type === "jasa") {
+        wrap.innerHTML = (s.formSchema || []).map(fieldHtml).join("");
+      } else {
+        wrap.innerHTML = fieldHtml({ key: "keluhan", label: "Detail keluhan *", type: "textarea", required: true, placeholder: "Jelaskan apa yang terjadi, sejak kapan, dan kondisi terkini..." });
+      }
+      el("complaint-image-wrap").classList.toggle("hidden", type !== "keluhan");
+    }
+
+    function renderComplaintPreviews() {
+      const preview = el("complaint-image-preview");
+      preview.innerHTML = complaintImages.map((image, index) =>
+        '<figure class="image-preview"><img src="' + image.dataUrl + '" alt="Preview foto problem ' + (index + 1) + '"><button type="button" data-remove-image="' + index + '" aria-label="Hapus foto">×</button><figcaption>' + escapeHtml(image.name) + '</figcaption></figure>'
+      ).join("");
+      preview.querySelectorAll("[data-remove-image]").forEach((button) => button.addEventListener("click", () => {
+        complaintImages.splice(Number(button.dataset.removeImage), 1);
+        renderComplaintPreviews();
+      }));
+    }
+
+    function loadComplaintImages(files) {
+      const selected = Array.from(files || []);
+      if (!selected.length) return;
+      const remaining = 3 - complaintImages.length;
+      if (remaining <= 0) { TP.toast("Maksimal 3 foto problem dapat dilampirkan.", "error"); return; }
+      selected.slice(0, remaining).forEach((file) => {
+        if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > 2 * 1024 * 1024) {
+          TP.toast(file.name + " tidak dapat ditambahkan. Gunakan JPG/PNG/WEBP maksimal 2 MB.", "error");
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => { complaintImages.push({ name: file.name, dataUrl: reader.result }); renderComplaintPreviews(); };
+        reader.readAsDataURL(file);
+      });
+      if (selected.length > remaining) TP.toast("Hanya " + remaining + " foto pertama yang ditambahkan.", "error");
+    }
+    function collectFormData() {
+      const data = {};
+      el("svc-form").querySelectorAll("[data-key]").forEach((inp) => {
+        if (inp.value && inp.value.trim()) data[inp.dataset.key] = inp.value.trim();
+      });
+      return data;
+    }
+
+    /* ======== SYARAT / KONTRAK / JENIS PELANGGAN ======== */
+    function renderSyarat() {
+      const s = currentSvc();
+      const area = el("syarat-area");
+      if (type === "keluhan") {
+        area.innerHTML = '<div class="ck-note">Keluhan diproses langsung oleh petugas tanpa syarat, kontrak, atau jenis pelanggan tambahan. Anda tinggal melanjutkan ke tahap data tambahan &amp; ringkasan.</div>';
+        return;
+      }
+      const jpIds = s.jenisPelanggan || [];
+      const syaratList = s.syarat || [];
+
+      const jpCards = jpIds.map((jid) => {
+        const j = TP.jpById(jid);
+        if (!j) return "";
+        const active = selJenis === jid ? " active" : "";
+        return `<button type="button" class="jp-opt${active}" data-jp="${jid}">
+          <b>${j.nama} <span class="chip blue">${j.id}</span></b>
+          <small>${j.golongan} · ${j.blok}</small>
+        </button>`;
+      }).join("");
+
+      const syaratItems = `<li class="agreement-check"><input type="checkbox" value="semua-syarat" ${syaratChecked.includes("semua-syarat") ? "checked" : ""}> <span><b>Saya telah membaca dan menyetujui seluruh syarat &amp; ketentuan layanan ini.</b><small>Rincian persyaratan tetap dapat dilihat melalui tautan di atas.</small></span></li>`;
+      const kontrakItems = `<li class="agreement-check"><input type="checkbox" value="semua-kontrak" ${kontrakChecked.includes("semua-kontrak") ? "checked" : ""}> <span><b>Saya menyetujui hak dan kewajiban pelanggan yang berlaku.</b><small>Centang ini mewakili seluruh poin kontrak pelanggan.</small></span></li>`;
+
+      area.innerHTML =
+        '<div class="ck-head"><h4>Jenis Pelanggan</h4><a href="#" onclick="event.preventDefault();TP.openServiceModal(\'' + s.id + '\')">Lihat rincian →</a></div>' +
+        '<div class="jp-select">' + jpCards + "</div>" +
+        '<div class="ck-head"><h4>Syarat &amp; Ketentuan</h4><a href="#" onclick="event.preventDefault();TP.openServiceModal(\'' + s.id + '\')">Lihat rincian →</a></div>' +
+        '<ul class="check-list">' + syaratItems + "</ul>" +
+        '<div class="ck-head"><h4>Kontrak Pelanggan (Hak &amp; Kewajiban)</h4><a href="#" onclick="event.preventDefault();TP.openServiceModal(\'' + s.id + '\')">Lihat rincian →</a></div>' +
+        '<ul class="check-list">' + kontrakItems + "</ul>";
+
+      area.querySelectorAll(".jp-opt").forEach((b) => {
+        b.addEventListener("click", () => {
+          selJenis = b.dataset.jp;
+          area.querySelectorAll(".jp-opt").forEach((x) => x.classList.toggle("active", x === b));
+        });
+      });
+      area.querySelectorAll(".check-list input").forEach((cb) => {
+        cb.addEventListener("change", () => {
+          const isKontrak = cb.value === "semua-kontrak";
+          const list = isKontrak ? kontrakChecked : syaratChecked;
+          if (cb.checked) { if (list.indexOf(cb.value) < 0) list.push(cb.value); }
+          else { const i = list.indexOf(cb.value); if (i >= 0) list.splice(i, 1); }
+        });
+      });
+    }
+
+    /* ======== DATA TAMBAHAN ======== */
+    function renderDataLayanan() {
+      const s = currentSvc();
+      if (el("data-layanan-box").dataset.service === `${type}:${s.id}`) return;
+      el("data-layanan-box").dataset.service = `${type}:${s.id}`;
+      el("data-layanan-box").innerHTML = type === "jasa" ? (s.dataSchema || []).map(fieldHtml).join("") :
+        '<div class="ck-note">Data keluhan telah diisi pada formulir sebelumnya.</div>';
+    }
+    function collectDataLayanan() {
+      const data = {};
+      el("data-layanan-box").querySelectorAll("[data-key]").forEach((inp) => {
+        if (inp.value.trim()) data[inp.dataset.key] = inp.value.trim();
+      });
+      return data;
+    }
+
+    /* ======== RINGKASAN KEBUTUHAN ======== */
+    function formatFieldVal(jasa, key, val) {
+      const f = (jasa.formSchema || []).find((x) => x.key === key);
+      if (f && f.type === "select") {
+        const opt = (f.options || []).find((o) => o === val);
+        if (opt) return opt;
+      }
+      return val;
+    }
+    function renderRingkasan() {
+      const box = el("ringkasan-box");
+      const s = currentSvc();
+      if (type === "keluhan") {
+        const det = (el("svc-form").querySelector("[data-key='keluhan']") || {}).value || "";
+        box.innerHTML = "Keluhan: <b>" + s.nama + "</b> — " + escapeHtml(det) + "<br>Prioritas: <b>" + el("f-prioritas").value + "</b>" + (complaintImages.length ? "<br>Lampiran foto: <b>" + complaintImages.length + " foto</b>" : "");
+        return;
+      }
+      const fdata = collectFormData();
+      const lines = [];
+      lines.push(s.ringkasanIntro || s.deskripsi);
+      const used = (s.formSchema || []).filter((f) => fdata[f.key]);
+      if (used.length) {
+        lines.push("<ul class='sum-list'>" + used.map((f) => "<li><b>" + f.label + ":</b> " + escapeHtml(formatFieldVal(s, f.key, fdata[f.key])) + "</li>").join("") + "</ul>");
+      }
+      if (selJenis) {
+        const j = TP.jpById(selJenis);
+        lines.push("<div><b>Jenis Pelanggan:</b> " + (j ? j.nama + " (" + j.id + ")" : selJenis) + "</div>");
+      }
+
+      lines.push("<div class='muted'><b>Estimasi biaya indikatif:</b> " + s.estimasi + "</div>");
+      box.innerHTML = lines.join("<br>");
+    }
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    /* ======== KONFIRMASI ======== */
+    function renderSummary() {
+      const s = currentSvc();
+      const chips = ['<span class="chip blue">' + (type === "jasa" ? "Jasa" : "Keluhan") + "</span>",
+        '<span class="chip amber">Prioritas: ' + el("f-prioritas").value + "</span>"];
+      const body =
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">' + chips.join("") + "</div>" +
+        "<b>" + s.nama + "</b><br>" +
+        "<div class='small muted' style='margin-top:4px'>" + el("f-nama").value + " • " + el("f-nohp").value + " • " + el("f-zona").value + " • No. Pel: " + (el("f-nopel").value || "—") + "</div>" +
+        (selJenis && type === "jasa" ? "<div class='small muted'>Jenis pelanggan: " + (TP.jpById(selJenis) ? TP.jpById(selJenis).nama + " (" + selJenis + ")" : selJenis) + "</div>" : "") +
+        "<hr style='border:none;border-top:1px solid var(--gray-200);margin:10px 0'>" +
+        "<div class='small'><b>Ringkasan:</b></div>" +
+        "<div class='small muted'>" + (el("ringkasan-box").textContent || "").slice(0, 220) + "…</div>" +
+        "<hr style='border:none;border-top:1px solid var(--gray-200);margin:10px 0'>" +
+        "<div class='small'>Data tambahan diisi: <b>" + Object.keys(collectDataLayanan()).length + "</b> · Syarat disetujui: <b>" + syaratChecked.length + "</b> · Kontrak disetujui: <b>" + kontrakChecked.length + "</b></div>";
+      el("confirm-summary").innerHTML = body;
+    }
+
+    /* ======== NAVIGASI & VALIDASI ======== */
+    function setStepVis(n) {
+      step = n;
+      document.querySelectorAll(".step-pane").forEach((p) => p.classList.toggle("hidden", Number(p.dataset.pane) !== n));
+      document.querySelectorAll("#stepper .step").forEach((s) => {
+        const i = Number(s.dataset.step);
+        s.classList.toggle("active", i === n);
+        s.classList.toggle("done", i < n);
+      });
+    }
+    function formOkForCurrent() {
+      let ok = true;
+      const fields = Array.from(el("ticket-form").querySelectorAll("[data-key], [required]"));
+      fields.forEach((inp) => {
+        const pane = inp.closest(".step-pane");
+        if (pane && pane.classList.contains("hidden")) return;
+        if (!inp.checkValidity()) {
+          ok = false;
+          if (inp.reportValidity) inp.reportValidity();
+          if (inp.focus) inp.focus();
+          return false;
+        }
+      });
+      return ok;
+    }
+    function formOkAll() {
+      let ok = true;
+      Array.from(el("ticket-form").querySelectorAll("[data-key], [required]")).forEach((inp) => {
+        if (inp.checkValidity && !inp.checkValidity()) ok = false;
+      });
+      return ok;
+    }
+    function validateLeave(n) {
+      if (n === 1) {
+        return formOkForCurrent();
+      }
+      if (n === 2) {
+        return formOkForCurrent();
+      }
+      if (n === 3) {
+        if (type === "jasa") {
+          if (!selJenis) { TP.toast("Silakan pilih jenis pelanggan terlebih dahulu.", "error"); return false; }
+          if (!syaratChecked.includes("semua-syarat")) { TP.toast("Setujui syarat dan ketentuan untuk melanjutkan.", "error"); return false; }
+          if (!kontrakChecked.includes("semua-kontrak")) { TP.toast("Setujui hak dan kewajiban pelanggan untuk melanjutkan.", "error"); return false; }
+        }
+        return true;
+      }
+      if (n === 4) {
+        return true;
+      }
+      return true;
+    }
+
+    function go2(n) {
+      setStepVis(n);
+    }
+
+    /* ======== SUBMIT ======== */
+    function submitTicket() {
+      if (!isLoggedIn()) { showLoginGate(); return; }
+      const s = currentSvc();
+      setStepVis(step);
+      if (!formOkAll()) {
+        if (el("ticket-form").reportValidity) el("ticket-form").reportValidity();
+        TP.toast("Lengkapi seluruh kolom wajib pada formulir layanan.", "error");
+        return;
+      }
+
+      const fdata = collectFormData();
+      const db = TP.DB.get();
+      const id = TP.uid("TPK-2026");
+      const ringkasan = (el("ringkasan-box").textContent || "").trim();
+      const ticket = {
+        id,
+        type,
+        idLayanan: el("f-layanan").value,
+        nmLayanan: s.nama,
+        nama: el("f-nama").value.trim(),
+        noHP: el("f-nohp").value.trim(),
+        alamat: el("f-alamat").value.trim(),
+        zona: el("f-zona").value,
+        noPelanggan: el("f-nopel").value.trim() || "—",
+        jasa: type === "jasa" ? "" : "",
+        keluhan: type === "keluhan" ? (fdata.keluhan || el("f-prioritas").value) : "",
+        catatan: el("f-catatan").value.trim(),
+        prioritas: el("f-prioritas").value,
+        jenisPelanggan: selJenis || "—",
+        formData: { ...fdata, ...collectDataLayanan() },
+        syaratCheck: { jenisPelanggan: selJenis, syarat: syaratChecked.slice(), kontrak: kontrakChecked.slice() },
+        dokumen: [],
+        images: type === "keluhan" ? complaintImages.slice() : [],
+        ringkasan: ringkasan.trim(),
+        biaya: { nominal: null, catatan: "—" },
+        status: "Baru",
+        created: TP.todays(),
+        timeline: [{ date: TP.todays(), text: "Tiket dibuat oleh pelanggan" }],
+        reaction: null
+      };
+      db.tickets.unshift(ticket);
+      TP.DB.set(db);
+
+      el("ticket-form").reset();
+      selJenis = null; syaratChecked = []; kontrakChecked = []; complaintImages = [];
+      renderComplaintPreviews();
+      setStepVis(1);
+      el("data-layanan-box").dataset.service = "";
+      el("data-layanan-box").innerHTML = "";
+      renderTickets();
+      TP.toast("Tiket " + id + " berhasil dibuat!", "success");
+      TP.openTicketModal(id);
+      el("f-layanan").dispatchEvent(new Event("change"));
+    }
+
+    /* ======== DAFTAR TIKET ======== */
+    function dayNum(dstr) {
+      const p = dstr.split("/");
+      return new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0])).getTime();
+    }
+    function renderTickets() {
+      const db = TP.DB.get();
+      const list = db.tickets.filter((t) => filter === "semua" || t.type === filter);
+      list.sort((a, b) => dayNum(b.created) - dayNum(a.created));
+      const wrap = el("ticket-list");
+      if (!list.length) {
+        wrap.innerHTML = '<p class="muted text-center" style="padding:24px 0">Belum ada tiket. Buat tiket pertama Anda di atas ↑</p>';
+        return;
+      }
+      wrap.innerHTML = list.map((t) => {
+        const isJasa = t.type === "jasa";
+        const sym = isJasa ? "▤" : "☏";
+        const chip = TP.STATUS_META[t.status] || { chip: "gray" };
+        const pri = TP.PRIORITY_META[t.prioritas] || { chip: "gray" };
+        return '<div class="ticket-list-item"><button class="ticket-row" data-id="' + t.id + '" onclick="selectTicket(\'' + t.id + '\')">' +
+          '<span class="t-symbol">' + sym + "</span>" +
+          '<div class="t-info"><div><span class="t-title">' + t.id + " · " + t.nmLayanan + "</span>" +
+          "<div class='t-meta'>" + (isJasa ? "Layanan jasa" : "Keluhan") + " • Dibuat " + t.created + " • " + t.nama + "</div></div></div>" +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip ' + pri.chip + '">' + t.prioritas + '</span><span class="chip ' + chip.chip + '">' + t.status + "</span></div></button>" +
+          '</div>';
+      }).join("");
+    }
+
+    function isLoggedIn() {
+      try { return Boolean(JSON.parse(localStorage.getItem("tirtapakuan_session") || "null")?.name); } catch (e) { return false; }
+    }
+    function showLoginGate() {
+      el("login-ticket-gate").classList.remove("hidden");
+      el("ticket-form-area").classList.add("hidden");
+    }
+    function applySessionToForm() {
+      try {
+        const session = JSON.parse(localStorage.getItem("tirtapakuan_session") || "null");
+        if (!session) return;
+        el("f-nama").value = session.name || "";
+        el("f-nohp").value = session.noHP || "";
+        el("f-nopel").value = session.noPelanggan || "";
+      } catch (e) {}
+    }
+
+    /* ======== EVENT BINDINGS ======== */
+    el("f-layanan").addEventListener("change", () => {
+      syncDesc();
+      selJenis = null; syaratChecked = []; kontrakChecked = [];
+      el("data-layanan-box").dataset.service = "";
+      if (type === "jasa") renderServiceForm();
+    });
+    document.querySelectorAll("#typeSeg button").forEach((b) => {
+      b.addEventListener("click", () => {
+        type = b.dataset.type;
+        document.querySelectorAll("#typeSeg button").forEach((x) => x.classList.toggle("active", x === b));
+        renderLayananOptions();
+        selJenis = null; syaratChecked = []; kontrakChecked = [];
+        el("data-layanan-box").dataset.service = "";
+        renderServiceForm();
+      });
+    });
+    document.querySelectorAll("#filterSeg button").forEach((b) => {
+      b.addEventListener("click", () => {
+        filter = b.dataset.filter;
+        document.querySelectorAll("#filterSeg button").forEach((x) => x.classList.toggle("active", x === b));
+        renderTickets();
+      });
+    });
+    el("btnSvcDetail").addEventListener("click", () => TP.openServiceModal(el("f-layanan").value));
+    el("f-keluhan-images").addEventListener("change", (e) => { loadComplaintImages(e.target.files); e.target.value = ""; });
+
+    el("toStep2").addEventListener("click", () => {
+      if (validateLeave(1)) { renderServiceForm(); go2(2); }
+    });
+    el("toStep3").addEventListener("click", () => {
+      if (validateLeave(2)) { renderSyarat(); go2(3); }
+    });
+    el("toStep4").addEventListener("click", () => {
+      if (validateLeave(3)) { renderDataLayanan(); renderRingkasan(); go2(4); }
+    });
+    el("toStep5").addEventListener("click", () => {
+      if (!formOkForCurrent()) return;
+      if (type === "jasa" && !selJenis) { TP.toast("Jenis pelanggan belum dipilih.", "error"); return; }
+      renderSummary();
+      go2(5);
+    });
+    el("backStep1").addEventListener("click", () => go2(1));
+    el("backStep2").addEventListener("click", () => go2(2));
+    el("backStep3").addEventListener("click", () => go2(3));
+    el("backStep4").addEventListener("click", () => go2(4));
+    el("ticket-form").addEventListener("submit", (e) => { e.preventDefault(); submitTicket(); });
+
+    /* ======== INIT ======== */
+    const params = new URLSearchParams(location.search);
+    if (params.get("type") === "keluhan") {
+      type = "keluhan";
+      document.querySelectorAll("#typeSeg button").forEach((x) => x.classList.toggle("active", x.dataset.type === "keluhan"));
+    } else if (params.get("type") === "jasa" && params.get("layanan")) {
+      type = "jasa";
+    }
+    renderLayananOptions();
+    if (params.get("layanan") && TP.svc(params.get("layanan"))) {
+      const selected = TP.svc(params.get("layanan"));
+      if ((type === "jasa" && selected.formSchema) || (type === "keluhan" && !selected.formSchema)) {
+        el("f-layanan").value = selected.id;
+        syncDesc();
+      }
+    }
+    renderServiceForm();
+    renderTickets();
+    go2(1);
+    if (!isLoggedIn()) showLoginGate(); else applySessionToForm();
+
+    document.querySelectorAll(".menu-toggle").forEach((btn) => btn.addEventListener("click", () => el("mainNav").classList.toggle("open")));
+  })();
+</script>
+</body>
+</html>
