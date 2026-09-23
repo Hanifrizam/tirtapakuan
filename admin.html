@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Operasional — Perumda Tirta Pakuan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230f3b77'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23fff'>✦</text></svg>'>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .admin-shell { min-height: 100vh; background: var(--gray-100); }
+  .admin-top { background: linear-gradient(110deg, var(--blue-900), #176b83); color: #fff; box-shadow: 0 4px 20px rgba(0,0,0,.18); }
+  .admin-top-inner { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:13px 0; flex-wrap:wrap; }
+  .admin-layout { display:grid; grid-template-columns:230px 1fr; gap:22px; padding:24px 0 44px; align-items:start; }
+  .admin-side { position:sticky; top:78px; }
+  .admin-nav { background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-sm); }
+  .admin-nav button { width:100%; display:flex; gap:10px; align-items:center; border:0; border-bottom:1px solid var(--gray-100); background:#fff; color:var(--gray-700); padding:13px 16px; font:600 .9rem inherit; text-align:left; cursor:pointer; }
+  .admin-nav button:last-child { border-bottom:0; }
+  .admin-nav button:hover { background:var(--blue-50); color:var(--blue-700); }
+  .admin-nav button.active { background:var(--teal-500); color:#fff; }
+  .admin-nav .ico { width:21px; text-align:center; }
+  .admin-section { display:none; animation:fadeUp .25s; }
+  .admin-section.active { display:block; }
+  .admin-section-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+  .admin-section-head h1 { color:var(--blue-900); font-size:1.55rem; margin-bottom:3px; }
+  .admin-toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .admin-toolbar .input, .admin-toolbar .select { width:auto; min-width:170px; }
+  .admin-kpi .value { font-size:1.65rem; }
+  .admin-ticket-table td { vertical-align:middle; }
+  .admin-ticket-id { color:var(--blue-700); font-weight:800; white-space:nowrap; }
+  .admin-ticket-name { font-weight:700; color:var(--gray-900); }
+  .admin-ticket-name small { display:block; color:var(--gray-500); font-weight:400; }
+  .admin-actions { display:flex; gap:6px; flex-wrap:wrap; }
+  .admin-actions .btn { white-space:nowrap; }
+  .admin-empty { padding:34px 18px; text-align:center; color:var(--gray-500); }
+  .admin-alert { border-left:4px solid var(--amber); background:var(--amber-bg); color:#735000; padding:12px 14px; border-radius:8px; margin-bottom:18px; }
+  .service-admin-row { display:grid; grid-template-columns:1fr 110px 110px; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid var(--gray-200); }
+  .service-admin-row:last-child { border-bottom:0; }
+  .service-admin-row strong { display:block; }
+  .service-admin-row small { color:var(--gray-500); }
+  .admin-log { list-style:none; padding:0; margin:0; }
+  .admin-log li { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--gray-200); }
+  .admin-log li:last-child { border-bottom:0; }
+  .admin-log time { flex:0 0 88px; color:var(--gray-500); font-size:.78rem; }
+  @media (max-width:920px) { .admin-layout { grid-template-columns:1fr; } .admin-side { position:static; } .admin-nav { display:flex; flex-wrap:wrap; } .admin-nav button { width:auto; flex:1; min-width:145px; } }
+  @media (max-width:640px) { .admin-toolbar .input, .admin-toolbar .select { width:100%; } .admin-ticket-table { min-width:760px; } .service-admin-row { grid-template-columns:1fr 80px 80px; } }
+</style>
+</head>
+<body>
+<div class="admin-shell">
+  <header class="admin-top">
+    <div class="container admin-top-inner">
+      <a class="brand" href="index.html"><span class="brand-logo">✦</span><span>Perumda <b>Tirta Pakuan</b><small>Admin Operasional · Dummy</small></span></a>
+      <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap"><span class="chip teal" style="background:#d6fff2;color:#087d70">MODE DEMO</span><a class="btn white small" href="dashboard.html">Dashboard pelanggan</a><a class="btn white small" href="index.html">Beranda</a></div>
+    </div>
+  </header>
+
+  <div class="container admin-layout">
+    <aside class="admin-side">
+      <nav class="admin-nav" id="admin-nav" aria-label="Menu admin">
+        <button class="active" data-section="overview"><span class="ico">◪</span>Ringkasan</button>
+        <button data-section="tickets"><span class="ico">☏</span>Antrean Tiket</button>
+        <button data-section="services"><span class="ico">▦</span>Layanan</button>
+        <button data-section="activity"><span class="ico">♨</span>Aktivitas</button>
+        <button data-section="settings"><span class="ico">⚙</span>Pengaturan Demo</button>
+      </nav>
+      <div class="card" style="margin-top:16px;padding:16px"><b style="color:var(--blue-900)">Aksi cepat</b><p class="small muted">Buka formulir untuk membuat tiket uji dari sisi pelanggan.</p><a class="btn teal block small" href="ticketing.html#layanan-tiket">＋ Buat tiket dummy</a></div>
+    </aside>
+
+    <main class="dash-main">
+      <section class="admin-section active" id="admin-overview">
+        <div class="admin-section-head"><div><span class="eyebrow">PUSAT KENDALI OPERASIONAL</span><h1>Ringkasan hari ini</h1><p class="muted small">Pantau antrean, prioritas, dan progres penanganan tiket layanan.</p></div><span class="chip blue" id="today-label"></span></div>
+        <div class="admin-alert"><b>Data dummy lokal.</b> Perubahan status dan biaya tersimpan di browser ini melalui `localStorage`, sehingga aman untuk simulasi alur admin.</div>
+        <div class="stat-grid admin-kpi">
+          <div class="stat-card"><div class="label">Total tiket</div><div class="value" id="kpi-total">0</div><div class="delta">Semua permohonan</div></div>
+          <div class="stat-card amber"><div class="label">Perlu verifikasi</div><div class="value" id="kpi-review">0</div><div class="delta">Butuh pemeriksaan</div></div>
+          <div class="stat-card teal"><div class="label">Sedang diproses</div><div class="value" id="kpi-process">0</div><div class="delta">Survey / penanganan</div></div>
+          <div class="stat-card green"><div class="label">Selesai</div><div class="value" id="kpi-done">0</div><div class="delta">Tiket terselesaikan</div></div>
+        </div>
+        <div class="dash-grid-2" style="margin-top:20px">
+          <div class="card"><div class="card-header"><div><h3>Prioritas antrean</h3><div class="sub">Tiket aktif yang perlu perhatian petugas.</div></div><button class="btn ghost small" data-go="tickets">Kelola tiket →</button></div><div id="priority-list"></div></div>
+          <div class="card"><div class="card-header"><div><h3>Distribusi status</h3><div class="sub">Komposisi tiket pada database dummy.</div></div></div><div id="status-chart"></div></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="admin-tickets">
+        <div class="admin-section-head"><div><span class="eyebrow">WORK QUEUE</span><h1>Antrean tiket</h1><p class="muted small">Periksa data, ubah status, tetapkan biaya, dan buka detail tiket.</p></div><button class="btn teal" data-go="overview">← Ringkasan</button></div>
+        <div class="card"><div class="admin-toolbar" style="margin-bottom:16px"><input class="input" id="ticket-search" placeholder="Cari ID, nama, layanan..." aria-label="Cari tiket"><select class="select" id="ticket-status"><option value="semua">Semua status</option></select><select class="select" id="ticket-type"><option value="semua">Semua jenis</option><option value="jasa">Jasa</option><option value="keluhan">Keluhan</option></select></div><div class="table-wrap"><table class="table admin-ticket-table"><thead><tr><th>Tiket</th><th>Pemohon</th><th>Layanan</th><th>Prioritas</th><th>Status</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody id="ticket-table-body"></tbody></table></div></div>
+      </section>
+
+      <section class="admin-section" id="admin-services">
+        <div class="admin-section-head"><div><span class="eyebrow">SERVICE CONTROL</span><h1>Kontrol layanan</h1><p class="muted small">Ringkasan performa dummy berdasarkan tiket yang masuk.</p></div></div>
+        <div class="card"><div class="card-header"><div><h3>Katalog layanan</h3><div class="sub">Klik jumlah aktif untuk melihat antrean terkait.</div></div></div><div id="service-list"></div></div>
+      </section>
+
+      <section class="admin-section" id="admin-activity">
+        <div class="admin-section-head"><div><span class="eyebrow">AUDIT TRAIL</span><h1>Aktivitas terbaru</h1><p class="muted small">Riwayat perubahan status dan pembaruan data dari tiket dummy.</p></div></div>
+        <div class="card"><ul class="admin-log" id="activity-list"></ul></div>
+      </section>
+
+      <section class="admin-section" id="admin-settings">
+        <div class="admin-section-head"><div><span class="eyebrow">DEMO CONFIGURATION</span><h1>Pengaturan demo</h1><p class="muted small">Kontrol data simulasi sebelum integrasi ke backend resmi.</p></div></div>
+        <div class="card" style="max-width:680px"><div class="card-header"><div><h3>Database lokal</h3><div class="sub">Data hanya disimpan pada browser saat ini.</div></div><span class="chip teal">Aktif</span></div><div class="field"><label>Key penyimpanan</label><input class="input" value="tirtapakuan_db_v1" disabled></div><div class="field"><label>Peran demo</label><select class="select" id="demo-role"><option value="admin">Admin</option><option value="petugas">Petugas</option><option value="pelanggan">Pelanggan</option></select></div><button class="btn danger" id="reset-demo">Reset data dummy</button><p class="small muted" style="margin:12px 0 0">Reset akan menghapus perubahan tiket lokal dan mengembalikan satu tiket contoh awal.</p></div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="toast-wrap"></div>
+<script src="js/main.js"></script>
+<script>
+(function () {
+  const TP = window.TP;
+  TP.ensureSpace();
+  window.TP_CURRENT_ROLE = "admin";
+  const $ = (id) => document.getElementById(id);
+  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const statusClass = (status) => (TP.STATUS_META[status] || { chip: "gray" }).chip;
+  const priorityClass = (priority) => (TP.PRIORITY_META[priority] || { chip: "gray" }).chip;
+  const flow = (ticket) => ticket.type === "keluhan" ? TP.STATUS_FLOW_KELUHAN : TP.STATUS_FLOW;
+  let activeServiceFilter = "semua";
+
+  function db() { return TP.DB.get(); }
+  function save(database) { TP.DB.set(database); render(); }
+  function changeStatus(id, status) {
+    const database = db(); const ticket = database.tickets.find((item) => item.id === id);
+    if (!ticket || ticket.status === status) return;
+    ticket.status = status;
+    ticket.timeline = Array.isArray(ticket.timeline) ? ticket.timeline : [];
+    ticket.timeline.push({ date: TP.todays(), text: "Status diperbarui admin: " + status });
+    save(database); TP.toast("Status " + id + " diperbarui.", "success");
+  }
+  function setFee(id) {
+    const input = document.querySelector('[data-fee="' + id + '"]'); const amount = Number(input && input.value);
+    if (!amount || amount < 1) { TP.toast("Masukkan nominal biaya yang valid.", "error"); return; }
+    const database = db(); const ticket = database.tickets.find((item) => item.id === id);
+    if (!ticket) return;
+    ticket.biaya = { nominal: amount, catatan: "Biaya ditetapkan admin (dummy)" };
+    ticket.timeline = Array.isArray(ticket.timeline) ? ticket.timeline : [];
+    ticket.timeline.push({ date: TP.todays(), text: "Biaya ditetapkan admin: " + TP.fmtRupiah(amount) });
+    save(database); TP.toast("Biaya layanan disimpan.", "success");
+  }
+  function show(section) {
+    document.querySelectorAll(".admin-section").forEach((el) => el.classList.toggle("active", el.id === "admin-" + section));
+    document.querySelectorAll("#admin-nav button").forEach((el) => el.classList.toggle("active", el.dataset.section === section));
+    if (section === "tickets") renderTickets();
+  }
+  function renderOverview(database) {
+    const tickets = database.tickets; const active = tickets.filter((t) => !["Selesai", "Ditolak", "Dibatalkan"].includes(t.status));
+    $("kpi-total").textContent = tickets.length; $("kpi-review").textContent = tickets.filter((t) => ["Baru", "Verifikasi", "Verifikasi Data"].includes(t.status)).length;
+    $("kpi-process").textContent = tickets.filter((t) => ["Survey Lapangan", "Penanganan", "Menunggu Pembayaran"].includes(t.status)).length; $("kpi-done").textContent = tickets.filter((t) => t.status === "Selesai").length;
+    $("today-label").textContent = TP.todays();
+    const urgent = active.sort((a, b) => ({"Sangat Tinggi":0,Tinggi:1,Normal:2,Rendah:3}[a.prioritas] ?? 4) - ({"Sangat Tinggi":0,Tinggi:1,Normal:2,Rendah:3}[b.prioritas] ?? 4)).slice(0, 5);
+    $("priority-list").innerHTML = urgent.length ? urgent.map((t) => `<button class="pay-row" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer" data-open="${esc(t.id)}"><div><b>${esc(t.id)}</b><div class="small muted">${esc(t.nmLayanan)} · ${esc(t.nama)}</div></div><span class="chip ${priorityClass(t.prioritas)}">${esc(t.prioritas)}</span></button>`).join("") : '<div class="admin-empty">Tidak ada tiket aktif.</div>';
+    const counts = {}; tickets.forEach((t) => { counts[t.status] = (counts[t.status] || 0) + 1; });
+    $("status-chart").innerHTML = Object.keys(counts).length ? Object.entries(counts).map(([status, count]) => `<div style="margin:11px 0"><div style="display:flex;justify-content:space-between;font-size:.86rem"><span>${esc(status)}</span><b>${count}</b></div><div class="progress"><div style="width:${Math.max(8, count / Math.max(tickets.length, 1) * 100)}%"></div></div></div>`).join("") : '<div class="admin-empty">Belum ada data.</div>';
+  }
+  function renderTickets() {
+    const database = db(); const search = $("ticket-search").value.toLowerCase(); const status = $("ticket-status").value; const type = $("ticket-type").value;
+    const rows = database.tickets.filter((t) => (!search || [t.id,t.nama,t.nmLayanan,t.noPelanggan].join(" ").toLowerCase().includes(search)) && (status === "semua" || t.status === status) && (type === "semua" || t.type === type) && (activeServiceFilter === "semua" || t.idLayanan === activeServiceFilter));
+    $("ticket-table-body").innerHTML = rows.length ? rows.map((t) => `<tr><td><span class="admin-ticket-id">${esc(t.id)}</span><small class="muted">${esc(t.type === "jasa" ? "Jasa" : "Keluhan")}</small></td><td><span class="admin-ticket-name">${esc(t.nama)}</span><small>${esc(t.noPelanggan || "Tanpa no. pelanggan")}</small></td><td>${esc(t.nmLayanan)}</td><td><span class="chip ${priorityClass(t.prioritas)}">${esc(t.prioritas)}</span></td><td><select class="select" style="min-width:145px;padding:7px 9px" data-status="${esc(t.id)}">${[...new Set([...flow(t), "Ditolak", "Dibatalkan"])].map((item) => `<option value="${esc(item)}" ${item === t.status ? "selected" : ""}>${esc(item)}</option>`).join("")}</select></td><td class="small">${esc(t.created)}</td><td><div class="admin-actions"><button class="btn small" data-open="${esc(t.id)}">Detail</button>${t.type === "jasa" && !["Selesai","Dibatalkan","Ditolak"].includes(t.status) ? `<input class="input" data-fee="${esc(t.id)}" type="number" min="0" placeholder="Biaya" value="${t.biaya && t.biaya.nominal ? t.biaya.nominal : ""}" style="width:105px;padding:7px 9px"><button class="btn teal small" data-save-fee="${esc(t.id)}">Rp</button>` : ""}</div></td></tr>`).join("") : '<tr><td colspan="7" class="admin-empty">Tidak ada tiket yang cocok dengan filter.</td></tr>';
+  }
+  function renderServices(database) {
+    const counts = {}; const active = {}; database.tickets.forEach((t) => { counts[t.idLayanan] = (counts[t.idLayanan] || 0) + 1; if (!["Selesai","Ditolak","Dibatalkan"].includes(t.status)) active[t.idLayanan] = (active[t.idLayanan] || 0) + 1; });
+    $("service-list").innerHTML = TP.SERVICE_CATALOG.map((service) => `<div class="service-admin-row"><div><strong>${esc(service.nama)}</strong><small>${esc(service.formSchema ? "Layanan jasa" : "Keluhan pelanggan")}</small></div><button class="btn ghost small" data-service-filter="${esc(service.id)}">${active[service.id] || 0} aktif</button><span class="chip blue">${counts[service.id] || 0} total</span></div>`).join("");
+  }
+  function renderActivity(database) {
+    const events = []; database.tickets.forEach((t) => (t.timeline || []).forEach((item) => events.push({ ...item, id: t.id }))); events.sort((a,b) => String(b.date).localeCompare(String(a.date))).splice(12);
+    $("activity-list").innerHTML = events.length ? events.map((item) => `<li><time>${esc(item.date)}</time><div><b>${esc(item.id)}</b><div class="small muted">${esc(item.text)}</div></div></li>`).join("") : '<li class="admin-empty">Belum ada aktivitas.</li>';
+  }
+  function render() { const database = db(); renderOverview(database); renderTickets(); renderServices(database); renderActivity(database); }
+
+  document.querySelectorAll("#admin-nav button").forEach((button) => button.addEventListener("click", () => show(button.dataset.section)));
+  document.querySelectorAll("[data-go]").forEach((button) => button.addEventListener("click", () => show(button.dataset.go)));
+  ["ticket-search", "ticket-status", "ticket-type"].forEach((id) => $(id).addEventListener("input", renderTickets));
+  $("ticket-table-body").addEventListener("change", (event) => { if (event.target.dataset.status) changeStatus(event.target.dataset.status, event.target.value); });
+  document.addEventListener("click", (event) => {
+    const open = event.target.closest("[data-open]"); if (open) TP.openTicketModal(open.dataset.open);
+    const saveFeeButton = event.target.closest("[data-save-fee]"); if (saveFeeButton) setFee(saveFeeButton.dataset.saveFee);
+    const service = event.target.closest("[data-service-filter]"); if (service) { activeServiceFilter = service.dataset.serviceFilter; show("tickets"); $("ticket-search").value = ""; $("ticket-status").value = "semua"; $("ticket-type").value = "semua"; renderTickets(); }
+  });
+  $("ticket-status").innerHTML += [...new Set(Object.keys(TP.STATUS_META))].map((status) => `<option value="${esc(status)}">${esc(status)}</option>`).join("");
+  $("reset-demo").addEventListener("click", () => { if (!confirm("Reset seluruh data tiket dummy?")) return; localStorage.removeItem(TP.LS_KEY); TP.ensureSpace(); render(); TP.toast("Data dummy dikembalikan.", "success"); });
+  render();
+})();
+</script>
+</body>
+</html>
